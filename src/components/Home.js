@@ -1,7 +1,11 @@
 import React from 'react';
-import ScrollableAnchor from 'react-scrollable-anchor';
+import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor';
 import { Waypoint } from 'react-waypoint';
 import DownCarat from './DownCarat';
+
+const content = require('../content.json');
+
+configureAnchors({ offset: -76 });
 
 const Home = () => (
   <div>
@@ -20,7 +24,16 @@ const Home = () => (
     </ScrollableAnchor>
     <ScrollableAnchor id="bio">
       <Waypoint topOffset="50%">
-        <div className="home-section">Insert bio here.</div>
+        <div className="home-section">
+          <p className="bio">{content.bio}</p>
+        </div>
+      </Waypoint>
+    </ScrollableAnchor>
+    <ScrollableAnchor id="products">
+      <Waypoint topOffset="50%">
+        <div className="home-section">
+          Show product category cards here.
+        </div>
       </Waypoint>
     </ScrollableAnchor>
   </div>

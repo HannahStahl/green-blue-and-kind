@@ -1,16 +1,10 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Rubik', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  letter-spacing: 2px;
 }
 
 .page-content {
@@ -32,6 +26,12 @@ code {
   justify-content: center;
   align-items: center;
   padding-bottom: 76px;
+}
+
+.bio {
+  padding: 10%;
+  line-height: 1.9;
+  font-size: 20px;
 }
 
 .cart-icon:hover {
