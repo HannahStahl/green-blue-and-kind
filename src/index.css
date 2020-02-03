@@ -26,8 +26,20 @@ code {
   align-items: center;
 }
 
+.home-section {
+  height: calc(100vh - 76px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 76px;
+}
+
 .cart-icon:hover {
   stroke: rgba(0, 0, 0, 0.7);
+}
+
+.shop-products:hover {
+  text-decoration: none;
 }
 
 .shop-products p {

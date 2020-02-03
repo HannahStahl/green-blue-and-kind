@@ -16,8 +16,8 @@ const NavBar = () => (
     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
     <Navbar.Collapse id="responsive-navbar-nav">
       <Nav className="ml-auto" activeKey={window.location.pathname}>
-        <Nav.Link href="/portfolio">Products</Nav.Link>
-        <Nav.Link href="/about"><CartIcon /></Nav.Link>
+        <Nav.Link href="/products">Products</Nav.Link>
+        <Nav.Link href="/cart"><CartIcon /></Nav.Link>
       </Nav>
     </Navbar.Collapse>
   </Navbar>

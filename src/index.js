@@ -7,23 +7,23 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Home from './components/Home';
-import About from './components/About';
-import Portfolio from './components/Portfolio';
+import Cart from './components/Cart';
+import Products from './components/Products';
 import NotFound from './components/NotFound';
 import NavBar from './components/NavBar';
 
 const Routes = () => (
   <Switch>
     <Route path="/" exact component={Home} />
-    <Route path="/about" exact component={About} />
-    <Route path="/portfolio" exact component={Portfolio} />
+    <Route path="/cart" exact component={Cart} />
+    <Route path="/products" exact component={Products} />
     <Route component={NotFound} />
   </Switch>
 );
 const App = withRouter(() => (
   <>
     <NavBar />
-    <div className="page-content">
+    <div>
       <Routes />
     </div>
   </>
