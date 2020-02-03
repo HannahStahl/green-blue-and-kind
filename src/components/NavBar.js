@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import CartIcon from './CartIcon';
 
 const NavBar = ({ categories }) => (
-  <Navbar collapseOnSelect expand="lg">
+  <Navbar collapseOnSelect expand="lg" fixed="top">
     <Navbar.Brand href="/">
       <img
         alt="Home"
