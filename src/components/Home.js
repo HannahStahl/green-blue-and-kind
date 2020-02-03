@@ -35,7 +35,7 @@ const Home = ({ categories }) => (
           <ItemsList alignment="center" items={categories ? categories.map(category => ({
             id: category.categoryId,
             name: category.categoryName,
-            url: `/categories/${category.categoryName}`,
+            url: `/categories/${category.categoryId}`,
             photo: category.categoryPhoto,
           })) : []} />
         </div>
