@@ -2,12 +2,13 @@ import React from 'react';
 import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor';
 import { Waypoint } from 'react-waypoint';
 import DownCarat from './DownCarat';
+import ItemsList from './ItemsList';
 
 const content = require('../content.json');
 
 configureAnchors({ offset: -76 });
 
-const Home = () => (
+const Home = ({ categories }) => (
   <div>
     <ScrollableAnchor id="home">
       <Waypoint topOffset="50%">
@@ -31,8 +32,13 @@ const Home = () => (
     </ScrollableAnchor>
     <ScrollableAnchor id="products">
       <Waypoint topOffset="50%">
-        <div className="home-section">
-          Show product category cards here.
+        <div className="home-section product-categories">
+          <ItemsList alignment="center" items={categories ? categories.map(category => ({
+            id: category.categoryId,
+            name: category.categoryName,
+            url: `/categories/${category.categoryName}`,
+            photo: category.categoryPhoto,
+          })) : []} />
         </div>
       </Waypoint>
     </ScrollableAnchor>

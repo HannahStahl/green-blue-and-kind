@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import {
   BrowserRouter, withRouter, Route, Switch,
@@ -8,26 +8,37 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Home from './components/Home';
 import Cart from './components/Cart';
-import Products from './components/Products';
+import Category from './components/Category';
 import NotFound from './components/NotFound';
 import NavBar from './components/NavBar';
+import config from './config';
 
-const Routes = () => (
+const Routes = ({ categories }) => (
   <Switch>
-    <Route path="/" exact component={Home} />
-    <Route path="/cart" exact component={Cart} />
-    <Route path="/products" exact component={Products} />
+    <Route path="/" exact render={() => <Home categories={categories} />} />
+    <Route path="/categories/:id" exact render={() => <Category />} />
+    <Route path="/cart" exact render={() => <Cart categories={categories} />} />
     <Route component={NotFound} />
   </Switch>
 );
-const App = withRouter(() => (
-  <>
-    <NavBar />
-    <div>
-      <Routes />
-    </div>
-  </>
-));
+
+const App = withRouter(() => {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    fetch(`${config.apiURL}/categories`).then(res => res.json()).then((json) => {
+      setCategories(json);
+    });
+  }, []);
+  return (
+    <>
+      <NavBar categories={categories} />
+      <div>
+        <Routes categories={categories} />
+      </div>
+    </>
+  );
+});
+
 ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
