@@ -1,10 +1,13 @@
 import React from 'react';
-import Button from 'react-bootstrap/Button';
+import DownCarat from './DownCarat';
 
 const Home = () => (
-  <div>
+  <div className="home-text">
     <h1>Make your mark without leaving a mark.</h1>
-    <Button>Shop Products</Button>
+    <div className="shop-products">
+      <p>Shop Products</p>
+      <DownCarat />
+    </div>
   </div>
 );
 

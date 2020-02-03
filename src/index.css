@@ -15,5 +15,47 @@ code {
 
 .page-content {
   padding: 5%;
-  padding-top: 7%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cart-icon:hover {
+  stroke: rgba(0, 0, 0, 0.7);
+}
+
+.shop-products p {
+  font-size: 24px;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 5px;
+}
+
+.shop-products:hover > p {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.shop-products:hover > .down-carat {
+  cursor: pointer;
+}
+
+.shop-products:hover > .down-carat polygon {
+  stroke: rgba(0, 0, 0, 0.7);
+}
+
+.home-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.home-text h1 {
+  margin-bottom: 70px;
 }
