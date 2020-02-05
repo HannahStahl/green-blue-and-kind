@@ -8,6 +8,10 @@ body {
   background-color: white;
 }
 
+p {
+  letter-spacing: 1.5px;
+}
+
 .page-content {
   padding: 5%;
   position: absolute;
@@ -23,6 +27,39 @@ body {
 
 .category-page {
   display: block;
+}
+
+.product-page {
+  display: block;
+}
+
+.product-info {
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.product-photos {
+  padding-right: 40px;
+  max-width: 400px;
+}
+
+.product-photo {
+  width: 300px;
+}
+
+.product-details {
+  padding-left: 40px;
+  text-align: left;
+  max-width: 400px;
+}
+
+.product-price p {
+  font-weight: bold;
+}
+
+.sale-price {
+  color: #e51b23;
 }
 
 .navbar.fixed-top {
