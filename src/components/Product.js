@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Product = (props) => {
+const Product = () => {
   return (
     <div className="page-content">
       TODO
