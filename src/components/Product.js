@@ -50,14 +50,16 @@ export default function Product(props) {
   }, [props.match.params.id]);
 
   function validateForm() {
-    return size && color && quantity;
+    return size && color && quantity > 0;
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log('here');
-    // TODO add to cart then clear inputs and show 
+    localStorage.setItem('test', 'hello');
+    // TODO add to cart then clear inputs and change text on button to [checkmark] Added to Cart
   }
+  
+  console.log(localStorage.getItem('test'));
 
   return !loading && (
     <div className="page-content product-page">
