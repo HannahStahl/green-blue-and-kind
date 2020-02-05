@@ -3,10 +3,10 @@ import { LinkContainer } from "react-router-bootstrap";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import config from '../config';
 
-export default function ItemsList({ items, alignment }) {
+export default function ItemsList({ items }) {
   return (
     <div className="ItemsList">
-      <ListGroup className={alignment}>
+      <ListGroup>
         {items.map(item => (
           <LinkContainer key={item.id} to={item.url}>
             <ListGroupItem>

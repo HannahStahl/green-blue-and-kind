@@ -9,6 +9,7 @@ import * as serviceWorker from './serviceWorker';
 import Home from './components/Home';
 import Cart from './components/Cart';
 import Category from './components/Category';
+import Product from './components/Product';
 import NotFound from './components/NotFound';
 import NavBar from './components/NavBar';
 import config from './config';
@@ -16,7 +17,8 @@ import config from './config';
 const Routes = ({ categories }) => (
   <Switch>
     <Route path="/" exact render={() => <Home categories={categories} />} />
-    <Route path="/categories/:id" exact render={() => <Category />} />
+    <Route path="/categories/:id" exact component={Category} />
+    <Route path="/products/:id" exact component={Product} />
     <Route path="/cart" exact render={() => <Cart categories={categories} />} />
     <Route component={NotFound} />
   </Switch>
