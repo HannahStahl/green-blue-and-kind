@@ -76,6 +76,10 @@ p {
   color: #e51b23;
 }
 
+.added-to-cart {
+  margin-right: 8px;
+}
+
 .navbar.fixed-top {
   background-color: white;
   border-bottom: solid 1px #eee;

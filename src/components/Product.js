@@ -10,6 +10,7 @@ export default function Product(props) {
   const [color, setColor] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [buttonText, setButtonText] = useState("Add to Cart");
 
   useEffect(() => {
     const productId = props.match.params.id;
@@ -55,11 +56,50 @@ export default function Product(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    localStorage.setItem('test', 'hello');
-    // TODO add to cart then clear inputs and change text on button to [checkmark] Added to Cart
+    let cart = JSON.parse(localStorage.getItem('cart'));
+    const newCartItem = {
+      productId: product.productId,
+      sizeId: size,
+      colorId: color,
+      quantity: parseInt(quantity),
+    };
+    if (cart) {
+      const index = cart.findIndex(item => (
+        item.productId === newCartItem.productId
+        && item.sizeId === newCartItem.sizeId
+        && item.colorId === newCartItem.colorId
+      ));
+      const currentCartItem = cart[index];
+      if (currentCartItem) {
+        const newQuantity = currentCartItem.quantity + parseInt(newCartItem.quantity);
+        cart[index].quantity = newQuantity;
+      } else {
+        cart.push(newCartItem);
+      }
+    } else {
+      cart = [newCartItem];
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    setSize(null);
+    setColor(null);
+    setQuantity(0);
+    setButtonText("Added to Cart"); // TODO add checkmark
   }
-  
-  console.log(localStorage.getItem('test'));
+
+  function updateSize(e) {
+    setSize(e.target.value);
+    setButtonText("Add to Cart");
+  }
+
+  function updateColor(e) {
+    setColor(e.target.value);
+    setButtonText("Add to Cart");
+  }
+
+  function updateQuantity(e) {
+    setQuantity(e.target.value);
+    setButtonText("Add to Cart");
+  }
 
   return !loading && (
     <div className="page-content product-page">
@@ -95,7 +135,7 @@ export default function Product(props) {
               <FormControl
                 as="select"
                 value={size || ""}
-                onChange={e => setSize(e.target.value)}
+                onChange={updateSize}
               >
                 <option key="" value="" disabled>Size</option>
                 {product.productSizes.map(productSize => (
@@ -107,7 +147,7 @@ export default function Product(props) {
               <FormControl
                 as="select"
                 value={color || ""}
-                onChange={e => setColor(e.target.value)}
+                onChange={updateColor}
               >
                 <option key="" value="" disabled>Color</option>
                 {product.productColors.map(productColor => (
@@ -121,7 +161,7 @@ export default function Product(props) {
                 min="0"
                 step="1"
                 value={quantity || 0}
-                onChange={e => setQuantity(e.target.value)}
+                onChange={updateQuantity}
               />
             </FormGroup>
             <Button
@@ -131,7 +171,8 @@ export default function Product(props) {
               variant="outline-primary"
               disabled={!validateForm()}
             >
-              Add to Cart
+              {buttonText === 'Added to Cart' && <i className="fas fa-check added-to-cart" />}
+              {buttonText}
             </Button>
           </form>
         </div>
