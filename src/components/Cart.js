@@ -44,6 +44,14 @@ export default function Cart() {
     }
   }, []);
 
+  function removeItem(index) {
+    const cart = JSON.parse(localStorage.getItem('cart'));
+    cart.splice(index, 1);
+    items.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    setItems([...items]);
+  }
+
   return !loading && (
     <div className="page-content cart-page">
       {items.length > 0 ? (
@@ -57,14 +65,14 @@ export default function Cart() {
               <td>Quantity</td>
               <td />
             </tr>
-            {items.map(item => (
+            {items.map((item, index) => (
               <tr key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
                 <td><img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} /></td>
                 <td><p>{item.productName}</p></td>
                 <td><p>{item.sizeName}</p></td>
                 <td><p>{item.colorName}</p></td>
                 <td><p>{item.quantity}</p></td>
-                <td><p><i className="fas fa-times" /></p></td>
+                <td><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></td>
               </tr>
             ))}
           </tbody>
