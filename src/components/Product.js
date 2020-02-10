@@ -83,7 +83,7 @@ export default function Product(props) {
     setSize(null);
     setColor(null);
     setQuantity(0);
-    setButtonText("Added to Cart"); // TODO add checkmark
+    setButtonText("Added to Cart");
   }
 
   function updateSize(e) {

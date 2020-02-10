@@ -324,3 +324,7 @@ p {
   height: 125px;
   object-fit: crop;
 }
+
+.cart-item .quantity {
+  width: 75px;
+}
