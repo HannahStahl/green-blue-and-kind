@@ -327,7 +327,7 @@ p, input, textarea, select, button {
 .cart-item img {
   width: 125px;
   height: 125px;
-  object-fit: crop;
+  object-fit: cover;
 }
 
 .cart-item .product-details {
