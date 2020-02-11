@@ -7,6 +7,7 @@ import config from '../config';
 export default function Cart() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
 
@@ -78,12 +79,12 @@ export default function Cart() {
   }
 
   function validateForm() {
-    return email.length > 0 && (items.length > 0 || message.length > 0);
+    return name.length > 0 && email.length > 0 && (items.length > 0 || message.length > 0);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    // TODO send email to Shana (you, on dev)
+    // TODO
   }
 
   function renderCart() {
@@ -141,13 +142,12 @@ export default function Cart() {
           </div>
         )}
         <form onSubmit={handleSubmit} className="cart-form">
-          <FormGroup controlId="message" className="message-container">
+          <FormGroup controlId="name" className="name-container">
             <FormControl
-              rows={10}
-              as="textarea"
-              placeholder={`Your Message${items.length > 0 ? ' (Optional)' : ''}`}
-              value={message}
-              onChange={e => setMessage(e.target.value)}
+              type="text"
+              placeholder="Your Name"
+              value={name}
+              onChange={e => setName(e.target.value)}
             />
           </FormGroup>
           <FormGroup controlId="email" className="email-container">
@@ -156,6 +156,15 @@ export default function Cart() {
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup controlId="message" className="message-container">
+            <FormControl
+              rows={10}
+              as="textarea"
+              placeholder={`Your Message${items.length > 0 ? ' (Optional)' : ''}`}
+              value={message}
+              onChange={e => setMessage(e.target.value)}
             />
           </FormGroup>
           <Button
