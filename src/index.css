@@ -297,7 +297,6 @@ p {
 
 .cart-item td {
   padding: 20px 30px 20px 30px;
-  border-top: solid 1px #eee;
   border-bottom: solid 1px #eee;
 }
 
@@ -335,4 +334,35 @@ p {
 
 .cart-item .quantity {
   width: 75px;
+}
+
+.cart-item .price {
+  text-align: right;
+}
+
+.cart-total-container, .submit-request {
+  padding: 45px 30px 35px 30px;
+  text-align: right;
+}
+
+.submit-request {
+  padding-top: 0px;
+}
+
+.submit-request .email-container {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 15px;
+}
+
+.submit-request .email {
+  width: 300px;
+}
+
+.cart-total-container p {
+  display: inline-block;
+}
+
+.cart-total {
+  margin-left: 15px;
 }
