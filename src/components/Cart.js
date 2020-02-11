@@ -8,6 +8,7 @@ export default function Cart() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     let cart = localStorage.getItem('cart');
@@ -77,7 +78,7 @@ export default function Cart() {
   }
 
   function validateForm() {
-    return email.length > 0;
+    return email.length > 0 && (items.length > 0 || message.length > 0);
   }
 
   function handleSubmit(event) {
@@ -85,87 +86,95 @@ export default function Cart() {
     // TODO send email to Shana (you, on dev)
   }
 
+  function renderCart() {
+    return (
+      <div className="cart-items">
+        <table>
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
+                <td><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></td>
+                <td>
+                  <a href={`/products/${item.productId}`}>
+                    <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
+                  </a>
+                </td>
+                <td className="product-details">
+                  <a href={`/products/${item.productId}`} className="product-name">
+                    <h4>{item.productName}</h4>
+                  </a>
+                  <p className="size">Size: {item.sizeName}</p>
+                  <p className="color">Color: {item.colorName}</p>
+                </td>
+                <td>
+                  <FormControl
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={item.quantity}
+                    onChange={(e) => updateQuantity(e.target.value, index)}
+                    className="quantity"
+                  />
+                </td>
+                <td><p className="price">${item.quantity * item.price}</p></td>
+              </tr>
+            ))}
+            <tr className="cart-total-container">
+              <td colSpan="5">
+                <p>Estimated Total:</p>
+                <p className="cart-total">${getTotal()}</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  function renderForm() {
+    return (
+      <div>
+        {items.length === 0 && (
+          <div>
+            <p>No items in cart.</p>
+            <p>Send a message anyway:</p>
+          </div>
+        )}
+        <form onSubmit={handleSubmit} className="cart-form">
+          <FormGroup controlId="message" className="message-container">
+            <FormControl
+              rows={10}
+              as="textarea"
+              placeholder={`Your Message${items.length > 0 ? ' (Optional)' : ''}`}
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+            />
+          </FormGroup>
+          <FormGroup controlId="email" className="email-container">
+            <FormControl
+              placeholder="Your Email Address"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
+          </FormGroup>
+          <Button
+            type="submit"
+            size="lg"
+            variant="outline-primary"
+            disabled={!validateForm()}
+          >
+            Submit Request
+          </Button>
+        </form>
+      </div>
+    );
+  }
+
   return !loading && (
     <div className="page-content cart-page">
-      {items.length > 0 ? (
-        <div>
-          <table className="cart-items">
-            <tbody>
-              <tr key="cart-header" className="cart-item cart-header">
-                <td />
-                <td />
-                <td>Product</td>
-                <td>Size</td>
-                <td>Color</td>
-                <td>Quantity</td>
-                <td>Price</td>
-              </tr>
-              {items.map((item, index) => (
-                <tr key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
-                  <td><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></td>
-                  <td>
-                    <a href={`/products/${item.productId}`}>
-                      <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
-                    </a>
-                  </td>
-                  <td>
-                    <a href={`/products/${item.productId}`} className="product-name">
-                      <p>{item.productName}</p>
-                    </a>
-                  </td>
-                  <td><p>{item.sizeName}</p></td>
-                  <td><p>{item.colorName}</p></td>
-                  <td>
-                    <FormControl
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={item.quantity}
-                      onChange={(e) => updateQuantity(e.target.value, index)}
-                      className="quantity"
-                    />
-                  </td>
-                  <td><p className="price">${item.quantity * item.price}</p></td>
-                </tr>
-              ))}
-              <tr>
-                <td colSpan="7">
-                  <div className="cart-total-container">
-                    <p>Estimated Total:</p>
-                    <p className="cart-total">${getTotal()}</p>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan="7">
-                  <div className="submit-request">
-                    <form onSubmit={handleSubmit}>
-                      <FormGroup controlId="email" className="email-container">
-                        <FormControl
-                          className="email"
-                          placeholder="Your Email Address"
-                          type="email"
-                          value={email}
-                          onChange={e => setEmail(e.target.value)}
-                        />
-                      </FormGroup>
-                      <Button
-                        type="submit"
-                        size="lg"
-                        variant="outline-primary"
-                        disabled={!validateForm()}
-                      >
-                        Submit Request
-                      </Button>
-                    </form>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      ) : <p className="no-items">No items in cart.</p>
-    }
+      {items.length > 0 && renderCart()}
+      {renderForm()}
     </div>
   );
 };
