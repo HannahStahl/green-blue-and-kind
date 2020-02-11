@@ -10,6 +10,7 @@ export default function Cart() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [requestSent, setRequestSent] = useState(false);
 
   useEffect(() => {
     let cart = localStorage.getItem('cart');
@@ -84,7 +85,23 @@ export default function Cart() {
 
   function handleSubmit(event) {
     event.preventDefault();
-    // TODO
+    console.log(items); // TODO add items to message
+    fetch(config.emailURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, message }),
+    }).then((response) => response.json()).then((json) => {
+      if (json.MessageId) {
+        setName('');
+        setEmail('');
+        setMessage('');
+        setRequestSent(true);
+        // TODO show confirmation modal
+      } else {
+        // TODO show error modal
+        window.alert('An error occurred with our contact form. Please send an email directly to shana@gbkproducts.com!');
+      }
+    });
   }
 
   function renderCart() {
