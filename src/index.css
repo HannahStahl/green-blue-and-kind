@@ -325,6 +325,14 @@ p {
   object-fit: crop;
 }
 
+.cart-item .product-name {
+  color: #212529;
+}
+
+.cart-item .product-name:hover {
+  text-decoration: none;
+}
+
 .cart-item .quantity {
   width: 75px;
 }

@@ -81,8 +81,16 @@ export default function Cart() {
             </tr>
             {items.map((item, index) => (
               <tr key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
-                <td><img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} /></td>
-                <td><p>{item.productName}</p></td>
+                <td>
+                  <a href={`/products/${item.productId}`}>
+                    <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
+                  </a>
+                </td>
+                <td>
+                  <a href={`/products/${item.productId}`} className="product-name">
+                    <p>{item.productName}</p>
+                  </a>
+                </td>
                 <td><p>{item.sizeName}</p></td>
                 <td><p>{item.colorName}</p></td>
                 <td>
