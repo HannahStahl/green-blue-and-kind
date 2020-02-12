@@ -79,7 +79,7 @@ p, input, textarea, select, button {
   color: #e51b23;
 }
 
-.added-to-cart {
+.fa-check {
   margin-right: 8px;
 }
 
@@ -295,15 +295,33 @@ p, input, textarea, select, button {
 }
 
 .cart-form {
-  padding-left: 50px;
-  padding-right: 50px;
+  margin-left: 50px;
+  margin-right: 50px;
   text-align: right;
+  width: 320px;
+}
+
+.cart-form .button {
+  display: flex;
+  justify-content: flex-start;
 }
 
 .cart-form .name-container,.message-container,.email-container {
   width: 300px;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+.cart-form .centered-button,.centered-note {
+  display: flex;
+  justify-content: center;
+}
+
+.centered-note {
+  margin-top: 30px;
+  text-align: left;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .cart-item td {

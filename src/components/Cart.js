@@ -79,26 +79,50 @@ export default function Cart() {
     return total;
   }
 
+  function updateName(e) {
+    setName(e.target.value);
+    setRequestSent(false);
+  }
+
+  function updateEmail(e) {
+    setEmail(e.target.value);
+    setRequestSent(false);
+  }
+
+  function updateMessage(e) {
+    setMessage(e.target.value);
+    setRequestSent(false);
+  }
+
   function validateForm() {
     return name.length > 0 && email.length > 0 && (items.length > 0 || message.length > 0);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(items); // TODO add items to message
+    const cart = {
+      items: items.map(item => ({
+        name: item.productName,
+        size: item.sizeName,
+        color: item.colorName,
+        quantity: item.quantity,
+        price: item.quantity * item.price,
+      })),
+      total: getTotal(),
+    };
     fetch(config.emailURL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, message }),
+      body: JSON.stringify({ name, email, cart, message }),
     }).then((response) => response.json()).then((json) => {
       if (json.MessageId) {
         setName('');
         setEmail('');
         setMessage('');
+        setItems([]);
         setRequestSent(true);
-        // TODO show confirmation modal
+        localStorage.setItem('cart', '[]');
       } else {
-        // TODO show error modal
         window.alert('An error occurred with our contact form. Please send an email directly to shana@gbkproducts.com!');
       }
     });
@@ -149,6 +173,21 @@ export default function Cart() {
     );
   }
 
+  let buttonText;
+  if (items.length > 0) {
+    if (requestSent) {
+      buttonText = 'Submitted Request'
+    } else {
+      buttonText = 'Submit Request';
+    }
+  } else {
+    if (requestSent) {
+      buttonText = 'Sent Message';
+    } else {
+      buttonText = 'Send Message';
+    }
+  }
+
   function renderForm() {
     return (
       <div>
@@ -164,7 +203,7 @@ export default function Cart() {
               type="text"
               placeholder="Your Name"
               value={name}
-              onChange={e => setName(e.target.value)}
+              onChange={updateName}
             />
           </FormGroup>
           <FormGroup controlId="email" className="email-container">
@@ -172,7 +211,7 @@ export default function Cart() {
               placeholder="Your Email Address"
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={updateEmail}
             />
           </FormGroup>
           <FormGroup controlId="message" className="message-container">
@@ -181,17 +220,25 @@ export default function Cart() {
               as="textarea"
               placeholder={`Your Message${items.length > 0 ? ' (Optional)' : ''}`}
               value={message}
-              onChange={e => setMessage(e.target.value)}
+              onChange={updateMessage}
             />
           </FormGroup>
-          <Button
-            type="submit"
-            size="lg"
-            variant="outline-primary"
-            disabled={!validateForm()}
-          >
-            Submit Request
-          </Button>
+          <div className={items.length > 0 ? 'button' : 'centered-button'}>
+            <Button
+              type="submit"
+              size="lg"
+              variant="outline-primary"
+              disabled={!validateForm()}
+            >
+              {requestSent && <i className="fas fa-check" />}
+              {buttonText}
+            </Button>
+          </div>
+          {items.length > 0 && (
+            <div className="centered-note">
+              <p>After receiving your request, we will follow up with an exact quote and time to deliver.</p>
+            </div>
+          )}
         </form>
       </div>
     );

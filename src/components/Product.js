@@ -171,7 +171,7 @@ export default function Product(props) {
               variant="outline-primary"
               disabled={!validateForm()}
             >
-              {buttonText === 'Added to Cart' && <i className="fas fa-check added-to-cart" />}
+              {buttonText === 'Added to Cart' && <i className="fas fa-check" />}
               {buttonText}
             </Button>
           </form>
