@@ -124,8 +124,25 @@ p, input, textarea, select, button {
   height: 100%;
 }
 
+.cart-icon {
+  margin-right: 5px;
+}
+
 .cart-icon:hover {
   stroke: rgba(0, 0, 0, 0.7);
+}
+
+.cart-number {
+  background-color: #e51b23;
+  font-size: 11px;
+  color: white;
+  border-radius: 50%;
+  padding: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 20px;
+  height: 20px;
 }
 
 .shop-products:hover {
@@ -223,6 +240,7 @@ p, input, textarea, select, button {
 
 .nav-link.cart-nav-link {
   padding-left: 107px !important;
+  position: relative;
 }
 
 .centered-nav-links {

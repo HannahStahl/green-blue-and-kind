@@ -14,28 +14,37 @@ import NotFound from './components/NotFound';
 import NavBar from './components/NavBar';
 import config from './config';
 
-const Routes = ({ categories }) => (
+const Routes = ({ categories, updateCart }) => (
   <Switch>
-    <Route path="/" exact render={() => <Home categories={categories} />} />
-    <Route path="/categories/:id" exact component={Category} />
-    <Route path="/products/:id" exact component={Product} />
-    <Route path="/cart" exact render={() => <Cart categories={categories} />} />
+    <Route path="/" exact render={(props) => <Home {...props} categories={categories} />} />
+    <Route path="/categories/:id" exact render={(props) => <Category {...props} />} />
+    <Route path="/products/:id" exact render={(props) => <Product {...props} updateCart={updateCart} />} />
+    <Route path="/cart" exact render={(props) => <Cart {...props} updateCart={updateCart} />} />
     <Route component={NotFound} />
   </Switch>
 );
 
 const App = withRouter(() => {
   const [categories, setCategories] = useState([]);
+  const [cart, setCart] = useState([]);
+
+  function updateCart() {
+    const cartStr = localStorage.getItem('cart');
+    setCart(cartStr ? JSON.parse(cartStr) : []);
+  }
+
   useEffect(() => {
     fetch(`${config.apiURL}/categories`).then(res => res.json()).then((json) => {
       setCategories(json);
     });
+    updateCart();
   }, []);
+
   return (
     <>
-      <NavBar categories={categories} />
+      <NavBar categories={categories} cart={cart} />
       <div>
-        <Routes categories={categories} />
+        <Routes categories={categories} updateCart={updateCart} />
       </div>
     </>
   );

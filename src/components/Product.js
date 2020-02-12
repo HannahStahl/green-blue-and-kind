@@ -84,6 +84,7 @@ export default function Product(props) {
     setColor(null);
     setQuantity(0);
     setButtonText("Added to Cart");
+    props.updateCart();
   }
 
   function updateSize(e) {

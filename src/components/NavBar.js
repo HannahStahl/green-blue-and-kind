@@ -2,8 +2,9 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import CartIcon from './CartIcon';
+import CartAmount from './CartAmount';
 
-const NavBar = ({ categories }) => (
+const NavBar = ({ categories, cart }) => (
   <Navbar collapseOnSelect expand="lg" fixed="top">
     <Navbar.Brand href="/">
       <img
@@ -23,7 +24,10 @@ const NavBar = ({ categories }) => (
             </Nav.Link>
           ))}
         </div>
-        <Nav.Link className="cart-nav-link" href="/cart"><CartIcon /></Nav.Link>
+        <Nav.Link className="cart-nav-link" href="/cart">
+          <CartIcon />
+          <CartAmount cart={cart} />
+        </Nav.Link>
       </Nav>
     </Navbar.Collapse>
   </Navbar>

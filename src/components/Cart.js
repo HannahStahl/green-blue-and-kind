@@ -4,7 +4,7 @@ import FormGroup from 'react-bootstrap/FormGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import config from '../config';
 
-export default function Cart() {
+export default function Cart({ updateCart }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
@@ -60,6 +60,7 @@ export default function Cart() {
     cart[index].quantity = parseInt(newQuantity);
     items[index].quantity = newQuantity;
     localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
     setItems([...items]);
   }
 
@@ -68,6 +69,7 @@ export default function Cart() {
     cart.splice(index, 1);
     items.splice(index, 1);
     localStorage.setItem('cart', JSON.stringify(cart));
+    updateCart();
     setItems([...items]);
   }
 
@@ -122,6 +124,7 @@ export default function Cart() {
         setItems([]);
         setRequestSent(true);
         localStorage.setItem('cart', '[]');
+        updateCart();
       } else {
         window.alert('An error occurred with our contact form. Please send an email directly to shana@gbkproducts.com!');
       }
