@@ -11,6 +11,7 @@ export default function Product(props) {
   const [quantity, setQuantity] = useState(null);
   const [loading, setLoading] = useState(true);
   const [buttonText, setButtonText] = useState("Add to Cart");
+  const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
     const productId = props.match.params.id;
@@ -106,12 +107,19 @@ export default function Product(props) {
     <div className="page-content product-page">
       <div className="product-info">
         <div className="product-photos">
-          {product.productPhotos.map(photo => (
+          <img
+            key={product.productPhotos[photoIndex].photoId}
+            src={`${config.cloudfrontURL}/${product.productPhotos[photoIndex].photoName}`}
+            alt={product.productPhotos[photoIndex].photoName}
+            className="product-photo"
+          />
+          {product.productPhotos.map((photo, index) => (
             <img
               key={photo.photoId}
               src={`${config.cloudfrontURL}/${photo.photoName}`}
               alt={photo.photoName}
-              className="product-photo"
+              className="product-thumbnail"
+              onClick={() => setPhotoIndex(index)}
             />
           ))}
         </div>

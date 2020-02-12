@@ -49,7 +49,18 @@ p, input, textarea, select, button {
 }
 
 .product-photo {
-  max-width: 300px;
+  width: 100%;
+  height: 350px;
+  object-fit: contain;
+}
+
+.product-thumbnail {
+  max-width: 80px;
+  margin: 10px;
+}
+
+.product-thumbnail:hover {
+  cursor: pointer;
 }
 
 .product-details {
