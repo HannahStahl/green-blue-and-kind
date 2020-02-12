@@ -402,3 +402,13 @@ p, input, textarea, select, button {
 .cart-total {
   margin-left: 15px;
 }
+
+.no-items {
+  margin-top: 60px;
+}
+
+.prices-note {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 14px;
+  margin-top: 40px;
+}

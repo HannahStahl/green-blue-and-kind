@@ -72,7 +72,10 @@ export default function Category(props) {
     <div className="page-content category-page">
       <Filter tags={tags} selectedIds={selectedTagIds} toggleTag={toggleTag} />
       {productsToDisplay.length > 0 ? (
-        <ItemsList alignment="center" items={productsToDisplay} />
+        <div>
+          <ItemsList alignment="center" items={productsToDisplay} />
+          <p className="prices-note">* Note that prices may not be up-to-date and are subject to change at any time.</p>
+        </div>
       ) : <div className="no-items"><p>No products with the selected filters.</p></div>}
     </div>
   );
