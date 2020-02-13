@@ -177,7 +177,7 @@ export default function Product(props) {
               block
               type="submit"
               size="lg"
-              variant="outline-primary"
+              variant="outline-dark"
               disabled={!validateForm()}
             >
               {buttonText === 'Added to Cart' && <i className="fas fa-check" />}

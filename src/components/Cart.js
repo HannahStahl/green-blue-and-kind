@@ -220,11 +220,12 @@ export default function Cart({ updateCart }) {
               onChange={updateMessage}
             />
           </FormGroup>
-          <div className={items.length > 0 ? 'button' : 'centered-button'}>
+          <div className="button">
             <Button
+              block
               type="submit"
               size="lg"
-              variant="outline-primary"
+              variant="outline-dark"
               disabled={!validateForm()}
             >
               {requestSent && <i className="fas fa-check" />}

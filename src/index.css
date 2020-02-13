@@ -25,6 +25,10 @@ p, input, textarea, select, button {
   align-items: center;
 }
 
+button {
+  border-radius: 0px !important;
+}
+
 .category-page, .product-page {
   display: block;
 }
@@ -370,20 +374,19 @@ p, input, textarea, select, button {
   width: 320px;
 }
 
-.cart-form .button {
-  display: flex;
-  justify-content: flex-start;
-}
-
 .cart-form .name-container,.message-container,.email-container {
   width: 300px;
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
-.cart-form .centered-button,.centered-note {
+.cart-form .button,.centered-note {
   display: flex;
   justify-content: center;
+}
+
+.cart-form .button {
+  margin-right: 20px;
 }
 
 .centered-note {
@@ -489,11 +492,6 @@ p, input, textarea, select, button {
 
   .cart-total-container {
     text-align: center;
-  }
-
-  .cart-form .button {
-    display: flex;
-    justify-content: center;
   }
 }
 
