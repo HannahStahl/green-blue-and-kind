@@ -1,10 +1,12 @@
 import React from 'react';
-import ScrollableAnchor from 'react-scrollable-anchor';
+import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor';
 import { Waypoint } from 'react-waypoint';
 import DownCarat from './DownCarat';
 import CategoriesList from './CategoriesList';
 
 const content = require('../content.json');
+
+configureAnchors({ offset: -77 });
 
 const Home = ({ categories }) => (
   <div className="home-page">

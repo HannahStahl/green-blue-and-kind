@@ -113,6 +113,7 @@ p, input, textarea, select, button {
   object-fit: cover;
   z-index: -2;
   width: 100vw;
+  height: 100vh;
   opacity: 0.8;
 }
 
@@ -124,6 +125,12 @@ p, input, textarea, select, button {
   padding: 10%;
   line-height: 1.9;
   font-size: 20px;
+}
+
+@media all and (min-width: 600px) {
+  .bio {
+    padding-bottom: calc(10% + 77px);
+  }
 }
 
 .product-categories {
@@ -199,10 +206,8 @@ p, input, textarea, select, button {
 }
 
 .categories-list .list-group-item {
-  width: 30vw;
-  max-width: 300px;
-  height: 25vw;
-  max-height: 250px;
+  width: 300px;
+  height: 300px;
   padding: 15px;
   margin: 30px;
   display: flex;
