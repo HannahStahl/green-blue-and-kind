@@ -134,44 +134,38 @@ export default function Cart({ updateCart }) {
   function renderCart() {
     return (
       <div className="cart-items">
-        <table>
-          <tbody>
-            {items.map((item, index) => (
-              <tr key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
-                <td><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></td>
-                <td>
-                  <a href={`/products/${item.productId}`}>
-                    <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
-                  </a>
-                </td>
-                <td className="product-details">
-                  <a href={`/products/${item.productId}`} className="product-name">
-                    <h4>{item.productName}</h4>
-                  </a>
-                  <p className="size">Size: {item.sizeName}</p>
-                  <p className="color">Color: {item.colorName}</p>
-                </td>
-                <td>
-                  <FormControl
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={item.quantity}
-                    onChange={(e) => updateQuantity(e.target.value, index)}
-                    className="quantity"
-                  />
-                </td>
-                <td><p className="price">${item.quantity * item.price}</p></td>
-              </tr>
-            ))}
-            <tr className="cart-total-container">
-              <td colSpan="5">
-                <p>Estimated Total:</p>
-                <p className="cart-total">${getTotal()}</p>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        {items.map((item, index) => (
+          <div key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
+            <div><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></div>
+            <div>
+              <a href={`/products/${item.productId}`}>
+                <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
+              </a>
+            </div>
+            <div className="product-details">
+              <a href={`/products/${item.productId}`} className="product-name">
+                <h4>{item.productName}</h4>
+              </a>
+              <p className="size">Size: {item.sizeName}</p>
+              <p className="color">Color: {item.colorName}</p>
+            </div>
+            <div>
+              <FormControl
+                type="number"
+                min="1"
+                step="1"
+                value={item.quantity}
+                onChange={(e) => updateQuantity(e.target.value, index)}
+                className="quantity"
+              />
+            </div>
+            <div><p className="price">${item.quantity * item.price}</p></div>
+          </div>
+        ))}
+        <div className="cart-total-container">
+          <p>Estimated Total:</p>
+          <p className="cart-total">${getTotal()}</p>
+        </div>
       </div>
     );
   }
