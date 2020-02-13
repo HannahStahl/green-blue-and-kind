@@ -32,12 +32,7 @@ const Home = ({ categories }) => (
     <ScrollableAnchor id="products">
       <Waypoint topOffset="50%">
         <div className="home-section product-categories">
-          <CategoriesList alignment="center" items={categories ? categories.map(category => ({
-            id: category.categoryId,
-            name: category.categoryName,
-            url: `/categories/${category.categoryId}`,
-            photo: category.categoryPhoto,
-          })) : []} />
+          <CategoriesList alignment="center" categories={categories || []} />
         </div>
       </Waypoint>
     </ScrollableAnchor>
