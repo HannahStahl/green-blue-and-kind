@@ -291,24 +291,6 @@ p, input, textarea, select, button {
   width: 100%;
 }
 
-.category-nav-link {
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.nav-link.cart-nav-link {
-  padding-left: 107px !important;
-  position: relative;
-}
-
-.centered-nav-links {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-
 .filter {
   margin-top: 70px;
   margin-bottom: 15px;
@@ -504,6 +486,11 @@ p, input, textarea, select, button {
   .cart-total-container {
     text-align: center;
   }
+
+  .cart-form .button {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 @media all and (max-width: 600px) {
@@ -548,9 +535,30 @@ p, input, textarea, select, button {
     padding-top: 25px;
     padding-bottom: 0px;
   }
+}
 
-  .cart-form .button {
+@media all and (min-width: 992px) {
+  .centered-nav-links {
+    width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+  }
+
+  .category-nav-link {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  
+  .nav-link.cart-nav-link {
+    padding-left: 107px !important;
+    position: relative;
+  }
+}
+
+@media all and (max-width: 991px) {
+  .nav-link {
+    text-align: right;
   }
 }
