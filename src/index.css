@@ -151,6 +151,10 @@ p, input, textarea, select, button {
   stroke: rgba(0, 0, 0, 0.7);
 }
 
+.active > .cart-icon {
+  stroke: rgba(0, 0, 0, 0.9);
+}
+
 .cart-number {
   background-color: #e51b23;
   font-size: 11px;
