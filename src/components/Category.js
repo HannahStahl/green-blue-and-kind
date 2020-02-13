@@ -61,22 +61,14 @@ export default function Category(props) {
     return selectedTagIdFound;
   }
 
-  const productsToDisplay = products ? products.filter(shouldDisplayProduct).map(product => ({
-    id: product.productId,
-    name: product.productName,
-    url: `/products/${product.productId}`,
-    photo: product.productPhotos[0].photoName,
-    price: product.productPrice,
-    salePrice: product.productSalePrice,
-    onSale: product.productOnSale,
-  })) : [];
+  const productsToDisplay = products ? products.filter(shouldDisplayProduct) : [];
 
   return !loading && (
     <div className="page-content category-page">
       <Filter tags={tags} selectedIds={selectedTagIds} toggleTag={toggleTag} />
       {productsToDisplay.length > 0 ? (
         <div>
-          <ProductsList alignment="center" items={productsToDisplay} />
+          <ProductsList alignment="center" products={productsToDisplay} />
           <p className="prices-note">* Note that prices may not be up-to-date and are subject to change at any time.</p>
         </div>
       ) : <div className="no-items"><p>No products with the selected filters.</p></div>}
