@@ -37,15 +37,18 @@ p, input, textarea, select, button {
 }
 
 .product-info {
-  margin-top: 100px;
+  margin-top: 70px;
   margin-bottom: 100px;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .product-photos {
+  padding-left: 40px;
   padding-right: 40px;
   max-width: 35%;
+  min-width: 350px;
 }
 
 .product-photo {
@@ -65,8 +68,11 @@ p, input, textarea, select, button {
 
 .product-details {
   padding-left: 40px;
+  padding-right: 40px;
   text-align: left;
   max-width: 45%;
+  min-width: 350px;
+  margin-top: 50px;
 }
 
 .product-description {
