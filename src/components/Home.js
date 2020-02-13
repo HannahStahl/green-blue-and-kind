@@ -2,7 +2,7 @@ import React from 'react';
 import ScrollableAnchor from 'react-scrollable-anchor';
 import { Waypoint } from 'react-waypoint';
 import DownCarat from './DownCarat';
-import ItemsList from './ItemsList';
+import CategoriesList from './CategoriesList';
 
 const content = require('../content.json');
 
@@ -32,7 +32,7 @@ const Home = ({ categories }) => (
     <ScrollableAnchor id="products">
       <Waypoint topOffset="50%">
         <div className="home-section product-categories">
-          <ItemsList alignment="center" items={categories ? categories.map(category => ({
+          <CategoriesList alignment="center" items={categories ? categories.map(category => ({
             id: category.categoryId,
             name: category.categoryName,
             url: `/categories/${category.categoryId}`,

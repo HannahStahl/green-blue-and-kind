@@ -3,9 +3,9 @@ import { LinkContainer } from "react-router-bootstrap";
 import { ListGroup, ListGroupItem } from "react-bootstrap";
 import config from '../config';
 
-export default function ItemsList({ items }) {
+export default function CategoriesList({ items }) {
   return (
-    <div className="ItemsList">
+    <div className="categories-list">
       <ListGroup>
         {items.map(item => (
           <LinkContainer key={item.id} to={item.url}>

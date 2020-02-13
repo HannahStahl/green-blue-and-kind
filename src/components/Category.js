@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import ItemsList from './ItemsList';
+import ProductsList from './ProductsList';
 import config from '../config';
 import Filter from './Filter';
 
@@ -66,6 +66,9 @@ export default function Category(props) {
     name: product.productName,
     url: `/products/${product.productId}`,
     photo: product.productPhotos[0].photoName,
+    price: product.productPrice,
+    salePrice: product.productSalePrice,
+    onSale: product.productOnSale,
   })) : [];
 
   return !loading && (
@@ -73,7 +76,7 @@ export default function Category(props) {
       <Filter tags={tags} selectedIds={selectedTagIds} toggleTag={toggleTag} />
       {productsToDisplay.length > 0 ? (
         <div>
-          <ItemsList alignment="center" items={productsToDisplay} />
+          <ProductsList alignment="center" items={productsToDisplay} />
           <p className="prices-note">* Note that prices may not be up-to-date and are subject to change at any time.</p>
         </div>
       ) : <div className="no-items"><p>No products with the selected filters.</p></div>}
