@@ -483,6 +483,10 @@ button {
   margin-top: 40px;
 }
 
+.nav-link.cart-nav-link {
+  position: relative;
+}
+
 @media all and (min-width: 600px) {
   .bio {
     padding-bottom: calc(10% + 77px);
@@ -557,11 +561,6 @@ button {
     margin-left: 10px;
     margin-right: 10px;
   }
-  
-  .nav-link.cart-nav-link {
-    padding-left: 107px !important;
-    position: relative;
-  }
 }
 
 @media all and (max-width: 991px) {
@@ -575,5 +574,9 @@ button {
     margin-left: 5px;
     margin-right: 5px;
     margin-bottom: 5px;
+  }
+
+  .cart-icon {
+    margin-right: 12px;
   }
 }
