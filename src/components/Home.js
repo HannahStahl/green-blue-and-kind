@@ -16,7 +16,7 @@ const Home = ({ categories }) => (
           <img src={`${process.env.PUBLIC_URL}/ocean.jpg`} alt="Home" className="home-page-image" />
           <div className="home-text">
             <h1>Make your mark without leaving a mark.</h1>
-            <a href="/#bio" className="shop-products">
+            <a href="/#products" className="shop-products">
               <p>Shop Products</p>
               <DownCarat />
             </a>
