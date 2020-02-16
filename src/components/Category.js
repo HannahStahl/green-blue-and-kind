@@ -11,26 +11,29 @@ export default function Category(props) {
 
   useEffect(() => {
     const promises = [
-      fetch(`${config.apiURL}/products/${props.match.params.id}`).then(res => res.json()),
-      fetch(`${config.apiURL}/productsToPhotos`).then(res => res.json()),
-      fetch(`${config.apiURL}/photos`).then(res => res.json()),
-      fetch(`${config.apiURL}/productsToTags`).then(res => res.json()),
-      fetch(`${config.apiURL}/tags`).then(res => res.json()),
+      fetch(`${config.apiURL}/products/${props.match.params.id}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
+      fetch(`${config.apiURL}/photos`).then((res) => res.json()),
+      fetch(`${config.apiURL}/productsToTags`).then((res) => res.json()),
+      fetch(`${config.apiURL}/tags`).then((res) => res.json()),
     ];
     Promise.all(promises).then((results) => {
-      const [products, productsToPhotos, photos, productsToTags, tags] = results;
-      products.forEach((product, index) => {
+      const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
+      productsInCategory.forEach((product, index) => {
         const photoIds = productsToPhotos
-          .filter(productToPhoto => productToPhoto.productId === product.productId)
-          .map(productToPhoto => productToPhoto.photoId);
-        products[index].productPhotos = photos.filter(photo => photoIds.includes(photo.photoId));
+          .filter((productToPhoto) => productToPhoto.productId === product.productId)
+          .map((productToPhoto) => productToPhoto.photoId);
+        productsInCategory[index].productPhotos = photos
+          .filter((photo) => photoIds.includes(photo.photoId));
         const tagIds = productsToTags
-          .filter(productToTag => productToTag.productId === product.productId)
-          .map(productToTag => productToTag.tagId);
-        products[index].productTagIds = tags.map(tag => tag.tagId).filter(tagId => tagIds.includes(tagId));
+          .filter((productToTag) => productToTag.productId === product.productId)
+          .map((productToTag) => productToTag.tagId);
+        productsInCategory[index].productTagIds = allTags
+          .map((tag) => tag.tagId)
+          .filter((tagId) => tagIds.includes(tagId));
       });
-      setProducts(products);
-      setTags(tags);
+      setProducts(productsInCategory);
+      setTags(allTags);
       setLoading(false);
     });
   }, [props.match.params.id]);
@@ -74,4 +77,4 @@ export default function Category(props) {
       ) : <div className="no-items"><p>No products with the selected filters.</p></div>}
     </div>
   );
-};
+}

@@ -7,9 +7,9 @@ import config from '../config';
 export default function Cart({ updateCart }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
   const [requestSent, setRequestSent] = useState(false);
 
   useEffect(() => {
@@ -18,23 +18,25 @@ export default function Cart({ updateCart }) {
       cart = JSON.parse(cart);
       if (cart.length > 0) {
         const promises = [
-          fetch(`${config.apiURL}/products`).then(res => res.json()),
-          fetch(`${config.apiURL}/productsToPhotos`).then(res => res.json()),
-          fetch(`${config.apiURL}/photos`).then(res => res.json()),
-          fetch(`${config.apiURL}/sizes`).then(res => res.json()),
-          fetch(`${config.apiURL}/colors`).then(res => res.json()),
+          fetch(`${config.apiURL}/products`).then((res) => res.json()),
+          fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
+          fetch(`${config.apiURL}/photos`).then((res) => res.json()),
+          fetch(`${config.apiURL}/sizes`).then((res) => res.json()),
+          fetch(`${config.apiURL}/colors`).then((res) => res.json()),
         ];
         Promise.all(promises).then((results) => {
           const [products, productsToPhotos, photos, sizes, colors] = results;
           cart.forEach((item, index) => {
             const {
-              productName, productPrice, productOnSale, productSalePrice
-            } = products.find(product => product.productId === item.productId);
+              productName, productPrice, productOnSale, productSalePrice,
+            } = products.find((product) => product.productId === item.productId);
             const price = productOnSale ? productSalePrice : productPrice;
-            const { sizeName } = sizes.find(size => size.sizeId === item.sizeId);
-            const { colorName } = colors.find(color => color.colorId === item.colorId);
-            const { photoId } = productsToPhotos.find(productToPhoto => productToPhoto.productId === item.productId);
-            const { photoName } = photos.find(photo => photo.photoId === photoId);
+            const { sizeName } = sizes.find((size) => size.sizeId === item.sizeId);
+            const { colorName } = colors.find((color) => color.colorId === item.colorId);
+            const { photoId } = productsToPhotos.find(
+              (productToPhoto) => productToPhoto.productId === item.productId,
+            );
+            const { photoName } = photos.find((photo) => photo.photoId === photoId);
             cart[index] = {
               ...item,
               productName,
@@ -103,7 +105,7 @@ export default function Cart({ updateCart }) {
   function handleSubmit(event) {
     event.preventDefault();
     const cart = {
-      items: items.map(item => ({
+      items: items.map((item) => ({
         name: item.productName,
         size: item.sizeName,
         color: item.colorName,
@@ -115,7 +117,9 @@ export default function Cart({ updateCart }) {
     fetch(config.emailURL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, cart, message }),
+      body: JSON.stringify({
+        name, email, cart, message,
+      }),
     }).then((response) => response.json()).then((json) => {
       if (json.MessageId) {
         setName('');
@@ -146,8 +150,8 @@ export default function Cart({ updateCart }) {
               <a href={`/products/${item.productId}`} className="product-name">
                 <h4>{item.productName}</h4>
               </a>
-              <p className="size">Size: {item.sizeName}</p>
-              <p className="color">Color: {item.colorName}</p>
+              <p className="size">{`Size: ${item.sizeName}`}</p>
+              <p className="color">{`Color: ${item.colorName}`}</p>
             </div>
             <div>
               <FormControl
@@ -159,12 +163,14 @@ export default function Cart({ updateCart }) {
                 className="quantity"
               />
             </div>
-            <div><p className="price">${item.quantity * item.price}</p></div>
+            <div>
+              <p className="price">{`$${item.quantity * item.price}`}</p>
+            </div>
           </div>
         ))}
         <div className="cart-total-container">
           <p>Estimated Total:</p>
-          <p className="cart-total">${getTotal()}</p>
+          <p className="cart-total">{`$${getTotal()}`}</p>
         </div>
       </div>
     );
@@ -173,16 +179,14 @@ export default function Cart({ updateCart }) {
   let buttonText;
   if (items.length > 0) {
     if (requestSent) {
-      buttonText = 'Submitted Request'
+      buttonText = 'Submitted Request';
     } else {
       buttonText = 'Submit Request';
     }
+  } else if (requestSent) {
+    buttonText = 'Sent Message';
   } else {
-    if (requestSent) {
-      buttonText = 'Sent Message';
-    } else {
-      buttonText = 'Send Message';
-    }
+    buttonText = 'Send Message';
   }
 
   function renderForm() {
@@ -234,7 +238,10 @@ export default function Cart({ updateCart }) {
           </div>
           {items.length > 0 && (
             <div className="centered-note">
-              <p>After receiving your request, we will follow up with an exact quote and time to deliver.</p>
+              <p>
+                {'After receiving your request, '}
+                {'we will follow up with an exact quote and time to deliver.'}
+              </p>
             </div>
           )}
         </form>
@@ -248,4 +255,4 @@ export default function Cart({ updateCart }) {
       {renderForm()}
     </div>
   );
-};
+}

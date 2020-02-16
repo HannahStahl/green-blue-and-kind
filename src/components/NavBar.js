@@ -9,7 +9,7 @@ const NavBar = ({ categories, cart }) => (
     <Navbar.Brand href="/">
       <img
         alt="Home"
-        src={process.env.PUBLIC_URL + "/logo.png"}
+        src={`${process.env.PUBLIC_URL}/logo.png`}
         height="50"
         className="d-inline-block align-top"
       />
@@ -18,7 +18,7 @@ const NavBar = ({ categories, cart }) => (
     <Navbar.Collapse id="responsive-navbar-nav">
       <Nav activeKey={window.location.pathname}>
         <div className="centered-nav-links">
-          {categories && categories.map(category => (
+          {categories && categories.map((category) => (
             <Nav.Link key={category.categoryId} className="category-nav-link" href={`/categories/${category.categoryId}`}>
               {category.categoryName}
             </Nav.Link>

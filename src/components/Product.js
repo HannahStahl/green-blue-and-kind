@@ -10,43 +10,49 @@ export default function Product(props) {
   const [color, setColor] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [buttonText, setButtonText] = useState("Add to Cart");
+  const [buttonText, setButtonText] = useState('Add to Cart');
   const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
     const productId = props.match.params.id;
     const promises = [
-      fetch(`${config.apiURL}/product/${productId}`).then(res => res.json()),
-      fetch(`${config.apiURL}/productsToPhotos/${productId}`).then(res => res.json()),
-      fetch(`${config.apiURL}/photos`).then(res => res.json()),
-      fetch(`${config.apiURL}/productsToTags/${productId}`).then(res => res.json()),
-      fetch(`${config.apiURL}/tags`).then(res => res.json()),
-      fetch(`${config.apiURL}/productsToSizes/${productId}`).then(res => res.json()),
-      fetch(`${config.apiURL}/sizes`).then(res => res.json()),
-      fetch(`${config.apiURL}/productsToColors/${productId}`).then(res => res.json()),
-      fetch(`${config.apiURL}/colors`).then(res => res.json()),
+      fetch(`${config.apiURL}/product/${productId}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/productsToPhotos/${productId}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/photos`).then((res) => res.json()),
+      fetch(`${config.apiURL}/productsToTags/${productId}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/tags`).then((res) => res.json()),
+      fetch(`${config.apiURL}/productsToSizes/${productId}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/sizes`).then((res) => res.json()),
+      fetch(`${config.apiURL}/productsToColors/${productId}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/colors`).then((res) => res.json()),
     ];
     Promise.all(promises).then((results) => {
       const [
-        product, productsToPhotos, photos, productsToTags, tags, productsToSizes, sizes, productsToColors, colors,
+        productDetails, productsToPhotos, photos, productsToTags, tags,
+        productsToSizes, sizes, productsToColors, colors,
       ] = results;
       const productPhotoIds = productsToPhotos
-        .filter(productToPhoto => productToPhoto.productId === product.productId)
-        .map(productToPhoto => productToPhoto.photoId);
-      product.productPhotos = photos.filter(photo => productPhotoIds.includes(photo.photoId));
+        .filter((productToPhoto) => productToPhoto.productId === productId)
+        .map((productToPhoto) => productToPhoto.photoId);
+      productDetails.productPhotos = photos
+        .filter((photo) => productPhotoIds.includes(photo.photoId));
       const productTagIds = productsToTags
-        .filter(productToTag => productToTag.productId === product.productId)
-        .map(productToTag => productToTag.tagId);
-      product.productTags = tags.filter(tag => productTagIds.includes(tag.tagId)).map(tag => tag.tagName);
+        .filter((productToTag) => productToTag.productId === productId)
+        .map((productToTag) => productToTag.tagId);
+      productDetails.productTags = tags
+        .filter((tag) => productTagIds.includes(tag.tagId))
+        .map((tag) => tag.tagName);
       const productSizeIds = productsToSizes
-        .filter(productToSize => productToSize.productId === product.productId)
-        .map(productToSize => productToSize.sizeId);
-      product.productSizes = sizes.filter(size => productSizeIds.includes(size.sizeId));
+        .filter((productToSize) => productToSize.productId === productId)
+        .map((productToSize) => productToSize.sizeId);
+      productDetails.productSizes = sizes
+        .filter((sizeInList) => productSizeIds.includes(sizeInList.sizeId));
       const productColorIds = productsToColors
-        .filter(productToColor => productToColor.productId === product.productId)
-        .map(productToColor => productToColor.colorId);
-      product.productColors = colors.filter(color => productColorIds.includes(color.colorId));
-      setProduct(product);
+        .filter((productToColor) => productToColor.productId === productId)
+        .map((productToColor) => productToColor.colorId);
+      productDetails.productColors = colors
+        .filter((colorInList) => productColorIds.includes(colorInList.colorId));
+      setProduct(productDetails);
       setLoading(false);
     });
   }, [props.match.params.id]);
@@ -65,7 +71,7 @@ export default function Product(props) {
       quantity: parseInt(quantity),
     };
     if (cart) {
-      const index = cart.findIndex(item => (
+      const index = cart.findIndex((item) => (
         item.productId === newCartItem.productId
         && item.sizeId === newCartItem.sizeId
         && item.colorId === newCartItem.colorId
@@ -84,23 +90,23 @@ export default function Product(props) {
     setSize(null);
     setColor(null);
     setQuantity(0);
-    setButtonText("Added to Cart");
+    setButtonText('Added to Cart');
     props.updateCart();
   }
 
   function updateSize(e) {
     setSize(e.target.value);
-    setButtonText("Add to Cart");
+    setButtonText('Add to Cart');
   }
 
   function updateColor(e) {
     setColor(e.target.value);
-    setButtonText("Add to Cart");
+    setButtonText('Add to Cart');
   }
 
   function updateQuantity(e) {
     setQuantity(e.target.value);
-    setButtonText("Add to Cart");
+    setButtonText('Add to Cart');
   }
 
   return !loading && (
@@ -136,31 +142,35 @@ export default function Product(props) {
           <p className="product-description">{product.productDescription}</p>
           {product.productTags.length > 0 && (
             <div className="product-tags">
-              {product.productTags.map(tag => <div key={tag} className="product-tag">{tag}</div>)}
+              {product.productTags.map((tag) => <div key={tag} className="product-tag">{tag}</div>)}
             </div>
           )}
           <form onSubmit={handleSubmit} className="product-form">
             <FormGroup controlId="size">
               <FormControl
                 as="select"
-                value={size || ""}
+                value={size || ''}
                 onChange={updateSize}
               >
                 <option key="" value="" disabled>Size</option>
-                {product.productSizes.map(productSize => (
-                  <option key={productSize.sizeId} value={productSize.sizeId}>{productSize.sizeName}</option>
+                {product.productSizes.map((productSize) => (
+                  <option key={productSize.sizeId} value={productSize.sizeId}>
+                    {productSize.sizeName}
+                  </option>
                 ))}
               </FormControl>
             </FormGroup>
             <FormGroup controlId="color">
               <FormControl
                 as="select"
-                value={color || ""}
+                value={color || ''}
                 onChange={updateColor}
               >
                 <option key="" value="" disabled>Color</option>
-                {product.productColors.map(productColor => (
-                  <option key={productColor.colorId} value={productColor.colorId}>{productColor.colorName}</option>
+                {product.productColors.map((productColor) => (
+                  <option key={productColor.colorId} value={productColor.colorId}>
+                    {productColor.colorName}
+                  </option>
                 ))}
               </FormControl>
             </FormGroup>
@@ -188,4 +198,4 @@ export default function Product(props) {
       </div>
     </div>
   );
-};
+}

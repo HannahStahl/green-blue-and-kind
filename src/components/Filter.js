@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 export default function Filter({ tags, selectedIds, toggleTag }) {
   const [selectedTagIds, setSelectedTagIds] = useState(selectedIds);
@@ -25,4 +25,4 @@ export default function Filter({ tags, selectedIds, toggleTag }) {
       </span>
     </span>
   );
-};
+}

@@ -13,7 +13,7 @@ const Home = ({ categories }) => (
     <ScrollableAnchor id="home">
       <Waypoint topOffset="50%">
         <div className="home-section">
-          <img src={process.env.PUBLIC_URL + "/ocean.jpg"} alt="Home" className="home-page-image" />
+          <img src={`${process.env.PUBLIC_URL}/ocean.jpg`} alt="Home" className="home-page-image" />
           <div className="home-text">
             <h1>Make your mark without leaving a mark.</h1>
             <a href="/#bio" className="shop-products">
