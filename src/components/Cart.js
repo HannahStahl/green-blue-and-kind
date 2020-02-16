@@ -18,7 +18,7 @@ export default function Cart({ updateCart }) {
       cart = JSON.parse(cart);
       if (cart.length > 0) {
         const promises = [
-          fetch(`${config.apiURL}/products`).then((res) => res.json()),
+          fetch(`${config.apiURL}/publishedProducts`).then((res) => res.json()),
           fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
           fetch(`${config.apiURL}/photos`).then((res) => res.json()),
           fetch(`${config.apiURL}/sizes`).then((res) => res.json()),

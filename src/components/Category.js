@@ -11,7 +11,7 @@ export default function Category(props) {
 
   useEffect(() => {
     const promises = [
-      fetch(`${config.apiURL}/products/${props.match.params.id}`).then((res) => res.json()),
+      fetch(`${config.apiURL}/publishedProducts/${props.match.params.id}`).then((res) => res.json()),
       fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
       fetch(`${config.apiURL}/photos`).then((res) => res.json()),
       fetch(`${config.apiURL}/productsToTags`).then((res) => res.json()),
