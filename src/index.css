@@ -566,6 +566,10 @@ button {
     margin-left: 10px;
     margin-right: 10px;
   }
+
+  .nav-link.cart-nav-link {
+    padding-left: 107px !important;
+  }
 }
 
 @media all and (max-width: 991px) {
