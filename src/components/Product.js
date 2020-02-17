@@ -127,14 +127,14 @@ export default function Product(props) {
           <img
             key={product.productPhotos[photoIndex].photoId}
             src={`${config.cloudfrontURL}/${product.productPhotos[photoIndex].photoName}`}
-            alt={product.productPhotos[photoIndex].photoName}
+            alt={product.productName}
             className="product-photo"
           />
           {product.productPhotos.map((photo, index) => (
             <img
               key={photo.photoId}
               src={`${config.cloudfrontURL}/${photo.photoName}`}
-              alt={photo.photoName}
+              alt={`${product.productName} ${index}`}
               className="product-thumbnail"
               onClick={() => setPhotoIndex(index)}
             />
