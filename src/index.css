@@ -102,6 +102,10 @@ button {
   max-width: 250px;
 }
 
+.product-form .form-control.gray {
+  color: rgba(0, 0, 0, 0.5);
+}
+
 .product-form button {
   margin-top: 25px;
 }
@@ -306,6 +310,7 @@ button {
 
 .product-tags {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 10px;
 }
 
@@ -321,7 +326,7 @@ button {
   font-size: 14px;
   border-radius: 25px;
   padding: 7px 12px 7px 12px;
-  margin: 5px;
+  margin: 5px 10px 5px 0px;
 }
 
 .product-tag, .tag.selected {

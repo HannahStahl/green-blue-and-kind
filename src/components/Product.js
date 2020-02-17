@@ -8,7 +8,7 @@ export default function Product(props) {
   const [product, setProduct] = useState({});
   const [size, setSize] = useState(null);
   const [color, setColor] = useState(null);
-  const [quantity, setQuantity] = useState(null);
+  const [quantity, setQuantity] = useState(0);
   const [loading, setLoading] = useState(true);
   const [buttonText, setButtonText] = useState('Add to Cart');
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -116,8 +116,10 @@ export default function Product(props) {
   }
 
   function updateQuantity(e) {
-    setQuantity(e.target.value);
-    setButtonText('Add to Cart');
+    if ((/^(\s*|\d+)$/).test(e.target.value)) {
+      setQuantity(e.target.value);
+      setButtonText('Add to Cart');
+    }
   }
 
   return !loading && (
@@ -162,6 +164,7 @@ export default function Product(props) {
                 as="select"
                 value={size || ''}
                 onChange={updateSize}
+                className={size ? '' : 'gray'}
               >
                 <option key="" value="" disabled>Size</option>
                 {product.productSizes.map((productSize) => (
@@ -176,6 +179,7 @@ export default function Product(props) {
                 as="select"
                 value={color || ''}
                 onChange={updateColor}
+                className={color ? '' : 'gray'}
               >
                 <option key="" value="" disabled>Color</option>
                 {product.productColors.map((productColor) => (
@@ -187,11 +191,10 @@ export default function Product(props) {
             </FormGroup>
             <FormGroup controlId="quantity">
               <FormControl
-                type="number"
-                min="0"
-                step="1"
-                value={quantity || 0}
+                type="text"
+                value={quantity}
                 onChange={updateQuantity}
+                className={parseInt(quantity) > 0 ? '' : 'gray'}
               />
             </FormGroup>
             <Button

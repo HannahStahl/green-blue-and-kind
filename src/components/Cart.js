@@ -58,12 +58,14 @@ export default function Cart({ updateCart }) {
   }, []);
 
   function updateQuantity(newQuantity, index) {
-    const cart = JSON.parse(localStorage.getItem('cart'));
-    cart[index].quantity = parseInt(newQuantity);
-    items[index].quantity = newQuantity;
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCart();
-    setItems([...items]);
+    if ((/^(\s*|\d+)$/).test(newQuantity)) {
+      const cart = JSON.parse(localStorage.getItem('cart'));
+      cart[index].quantity = parseInt(newQuantity);
+      items[index].quantity = newQuantity;
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCart();
+      setItems([...items]);
+    }
   }
 
   function removeItem(index) {
@@ -155,9 +157,7 @@ export default function Cart({ updateCart }) {
             </div>
             <div>
               <FormControl
-                type="number"
-                min="1"
-                step="1"
+                type="text"
                 value={item.quantity}
                 onChange={(e) => updateQuantity(e.target.value, index)}
                 className="quantity"
