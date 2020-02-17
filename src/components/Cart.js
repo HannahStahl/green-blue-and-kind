@@ -80,7 +80,7 @@ export default function Cart({ updateCart }) {
     items.forEach((item) => {
       total += item.quantity * item.price;
     });
-    return total;
+    return total.toFixed(2);
   }
 
   function updateName(e) {
@@ -164,7 +164,7 @@ export default function Cart({ updateCart }) {
               />
             </div>
             <div>
-              <p className="price">{`$${item.quantity * item.price}`}</p>
+              <p className="price">{`$${(item.quantity * item.price).toFixed(2)}`}</p>
             </div>
           </div>
         ))}
