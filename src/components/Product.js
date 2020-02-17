@@ -31,11 +31,14 @@ export default function Product(props) {
         productDetails, productsToPhotos, photos, productsToTags, tags,
         productsToSizes, sizes, productsToColors, colors,
       ] = results;
+      console.log(productsToPhotos);
       const productPhotoIds = productsToPhotos
         .filter((productToPhoto) => productToPhoto.productId === productId)
         .map((productToPhoto) => productToPhoto.photoId);
+      console.log(productPhotoIds);
       productDetails.productPhotos = photos
         .filter((photo) => productPhotoIds.includes(photo.photoId));
+      console.log(productDetails.productPhotos);
       const productTagIds = productsToTags
         .filter((productToTag) => productToTag.productId === productId)
         .map((productToTag) => productToTag.tagId);
@@ -109,6 +112,7 @@ export default function Product(props) {
     setButtonText('Add to Cart');
   }
 
+  console.log(product.productPhotos);
   return !loading && (
     <div className="page-content product-page">
       <div className="product-info">
