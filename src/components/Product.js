@@ -31,30 +31,38 @@ export default function Product(props) {
         productDetails, productsToPhotos, photos, productsToTags, tags,
         productsToSizes, sizes, productsToColors, colors,
       ] = results;
-      console.log(productsToPhotos);
       const productPhotoIds = productsToPhotos
         .filter((productToPhoto) => productToPhoto.productId === productId)
         .map((productToPhoto) => productToPhoto.photoId);
-      console.log(productPhotoIds);
-      productDetails.productPhotos = photos
-        .filter((photo) => productPhotoIds.includes(photo.photoId));
-      console.log(productDetails.productPhotos);
+      const productPhotos = [];
+      productPhotoIds.forEach((photoId) => {
+        productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+      });
+      productDetails.productPhotos = productPhotos;
       const productTagIds = productsToTags
         .filter((productToTag) => productToTag.productId === productId)
         .map((productToTag) => productToTag.tagId);
-      productDetails.productTags = tags
-        .filter((tag) => productTagIds.includes(tag.tagId))
-        .map((tag) => tag.tagName);
+      const productTags = [];
+      productTagIds.forEach((tagId) => {
+        productTags.push(tags.find((tag) => tag.tagId === tagId));
+      });
+      productDetails.productTags = productTags.map((tag) => tag.tagName);
       const productSizeIds = productsToSizes
         .filter((productToSize) => productToSize.productId === productId)
         .map((productToSize) => productToSize.sizeId);
-      productDetails.productSizes = sizes
-        .filter((sizeInList) => productSizeIds.includes(sizeInList.sizeId));
+      const productSizes = [];
+      productSizeIds.forEach((sizeId) => {
+        productSizes.push(sizes.find((sizeInList) => sizeInList.sizeId === sizeId));
+      });
+      productDetails.productSizes = productSizes;
       const productColorIds = productsToColors
         .filter((productToColor) => productToColor.productId === productId)
         .map((productToColor) => productToColor.colorId);
-      productDetails.productColors = colors
-        .filter((colorInList) => productColorIds.includes(colorInList.colorId));
+      const productColors = [];
+      productColorIds.forEach((colorId) => {
+        productColors.push(colors.find((colorInList) => colorInList.colorId === colorId));
+      });
+      productDetails.productColors = productColors;
       setProduct(productDetails);
       setLoading(false);
     });
@@ -112,7 +120,6 @@ export default function Product(props) {
     setButtonText('Add to Cart');
   }
 
-  console.log(product.productPhotos);
   return !loading && (
     <div className="page-content product-page">
       <div className="product-info">

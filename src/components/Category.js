@@ -20,17 +20,22 @@ export default function Category(props) {
     Promise.all(promises).then((results) => {
       const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
       productsInCategory.forEach((product, index) => {
-        const photoIds = productsToPhotos
+        const productPhotoIds = productsToPhotos
           .filter((productToPhoto) => productToPhoto.productId === product.productId)
           .map((productToPhoto) => productToPhoto.photoId);
-        productsInCategory[index].productPhotos = photos
-          .filter((photo) => photoIds.includes(photo.photoId));
-        const tagIds = productsToTags
+        const productPhotos = [];
+        productPhotoIds.forEach((photoId) => {
+          productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+        });
+        productsInCategory[index].productPhotos = productPhotos;
+        const productTagIds = productsToTags
           .filter((productToTag) => productToTag.productId === product.productId)
           .map((productToTag) => productToTag.tagId);
-        productsInCategory[index].productTagIds = allTags
-          .map((tag) => tag.tagId)
-          .filter((tagId) => tagIds.includes(tagId));
+        const productTags = [];
+        productTagIds.forEach((tagId) => {
+          productTags.push(allTags.find((tag) => tag.tagId === tagId));
+        });
+        productsInCategory[index].productTagIds = productTags.map((tag) => tag.tagId);
       });
       setProducts(productsInCategory);
       setTags(allTags);
