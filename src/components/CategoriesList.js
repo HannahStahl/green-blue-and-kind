@@ -8,7 +8,7 @@ export default function CategoriesList({ categories }) {
     <div className="categories-list">
       <ListGroup>
         {categories.map((category) => (
-          <LinkContainer key={category.categoryId} to={`/categories/${category.categoryId}`}>
+          <LinkContainer key={category.categoryId} to={`/items/${category.categoryName.replace(/ /g, '_')}`}>
             <ListGroupItem>
               {category.categoryPhoto && (
                 <img src={`${config.cloudfrontURL}/${category.categoryPhoto}`} alt={category.categoryName} />

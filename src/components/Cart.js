@@ -5,6 +5,8 @@ import FormControl from 'react-bootstrap/FormControl';
 import config from '../config';
 
 export default function Cart({ updateCart }) {
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
@@ -18,6 +20,7 @@ export default function Cart({ updateCart }) {
       cart = JSON.parse(cart);
       if (cart.length > 0) {
         const promises = [
+          fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()),
           fetch(`${config.apiURL}/publishedProducts`).then((res) => res.json()),
           fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
           fetch(`${config.apiURL}/photos`).then((res) => res.json()),
@@ -25,11 +28,13 @@ export default function Cart({ updateCart }) {
           fetch(`${config.apiURL}/colors`).then((res) => res.json()),
         ];
         Promise.all(promises).then((results) => {
-          const [products, productsToPhotos, photos, sizes, colors] = results;
+          const [allCategories, allProducts, productsToPhotos, photos, sizes, colors] = results;
+          setCategories(allCategories);
+          setProducts(allProducts);
           cart.forEach((item, index) => {
             const {
               productName, productPrice, productOnSale, productSalePrice,
-            } = products.find((product) => product.productId === item.productId);
+            } = allProducts.find((product) => product.productId === item.productId);
             const price = productOnSale ? productSalePrice : productPrice;
             const { sizeName } = sizes.find((size) => size.sizeId === item.sizeId);
             const { colorName } = colors.find((color) => color.colorId === item.colorId);
@@ -137,37 +142,50 @@ export default function Cart({ updateCart }) {
     });
   }
 
+  function getProductURL(productId) {
+    const product = products.find(
+      (productInList) => productInList.productId === productId,
+    );
+    const category = categories.find(
+      (categoryInList) => categoryInList.categoryId === product.categoryId,
+    );
+    return `/items/${category.categoryName.replace(/ /g, '_')}/${product.productName.replace(/ /g, '_')}`;
+  }
+
   function renderCart() {
     return (
       <div className="cart-items">
-        {items.map((item, index) => (
-          <div key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
-            <div><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></div>
-            <div>
-              <a href={`/products/${item.productId}`}>
-                <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
-              </a>
+        {items.map((item, index) => {
+          const productURL = getProductURL(item.productId);
+          return (
+            <div key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
+              <div><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></div>
+              <div>
+                <a href={productURL}>
+                  <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
+                </a>
+              </div>
+              <div className="product-details">
+                <a href={productURL} className="product-name">
+                  <h4>{item.productName}</h4>
+                </a>
+                <p className="size">{`Size: ${item.sizeName}`}</p>
+                <p className="color">{`Color: ${item.colorName}`}</p>
+              </div>
+              <div>
+                <FormControl
+                  type="text"
+                  value={item.quantity}
+                  onChange={(e) => updateQuantity(e.target.value, index)}
+                  className="quantity"
+                />
+              </div>
+              <div>
+                <p className="price">{`$${(item.quantity * item.price).toFixed(2)}`}</p>
+              </div>
             </div>
-            <div className="product-details">
-              <a href={`/products/${item.productId}`} className="product-name">
-                <h4>{item.productName}</h4>
-              </a>
-              <p className="size">{`Size: ${item.sizeName}`}</p>
-              <p className="color">{`Color: ${item.colorName}`}</p>
-            </div>
-            <div>
-              <FormControl
-                type="text"
-                value={item.quantity}
-                onChange={(e) => updateQuantity(e.target.value, index)}
-                className="quantity"
-              />
-            </div>
-            <div>
-              <p className="price">{`$${(item.quantity * item.price).toFixed(2)}`}</p>
-            </div>
-          </div>
-        ))}
+          );
+        })}
         <div className="cart-total-container">
           <p>Estimated Total:</p>
           <p className="cart-total">{`$${getTotal()}`}</p>

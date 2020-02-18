@@ -3,12 +3,15 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import config from '../config';
 
-export default function ProductsList({ products }) {
+export default function ProductsList({ category, products }) {
   return (
     <div className="products-list">
       <ListGroup>
         {products.map((product) => (
-          <LinkContainer key={product.productId} to={`/products/${product.productId}`}>
+          <LinkContainer
+            key={product.productId}
+            to={`/items/${category.categoryName.replace(/ /g, '_')}/${product.productName.replace(/ /g, '_')}`}
+          >
             <ListGroupItem>
               {product.productPhotos[0].photoName && (
                 <img src={`${config.cloudfrontURL}/${product.productPhotos[0].photoName}`} alt={product.productName} />

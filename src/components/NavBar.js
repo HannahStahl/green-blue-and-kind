@@ -19,7 +19,7 @@ const NavBar = ({ categories, cart }) => (
       <Nav activeKey={window.location.pathname}>
         <div className="centered-nav-links">
           {categories && categories.map((category) => (
-            <Nav.Link key={category.categoryId} className="category-nav-link" href={`/categories/${category.categoryId}`}>
+            <Nav.Link key={category.categoryId} className="category-nav-link" href={`/items/${category.categoryName.replace(/ /g, '_')}`}>
               {category.categoryName}
             </Nav.Link>
           ))}

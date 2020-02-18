@@ -18,8 +18,8 @@ import config from './config';
 const Routes = ({ categories, updateCart }) => (
   <Switch>
     <Route path="/" exact render={(props) => <Home {...props} categories={categories} />} />
-    <Route path="/categories/:id" exact render={(props) => <Category {...props} />} />
-    <Route path="/products/:id" exact render={(props) => <Product {...props} updateCart={updateCart} />} />
+    <Route path="/items/:category" exact render={(props) => <Category {...props} />} />
+    <Route path="/items/:category/:product" exact render={(props) => <Product {...props} updateCart={updateCart} />} />
     <Route path="/cart" exact render={(props) => <Cart {...props} updateCart={updateCart} />} />
     <Route component={NotFound} />
   </Switch>

@@ -4,44 +4,53 @@ import config from '../config';
 import Filter from './Filter';
 
 export default function Category(props) {
+  const [category, setCategory] = useState({});
   const [products, setProducts] = useState([]);
   const [tags, setTags] = useState([]);
   const [selectedTagIds, setSelectedTagIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const promises = [
-      fetch(`${config.apiURL}/publishedProducts/${props.match.params.id}`).then((res) => res.json()),
-      fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
-      fetch(`${config.apiURL}/photos`).then((res) => res.json()),
-      fetch(`${config.apiURL}/productsToTags`).then((res) => res.json()),
-      fetch(`${config.apiURL}/tags`).then((res) => res.json()),
-    ];
-    Promise.all(promises).then((results) => {
-      const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
-      productsInCategory.forEach((product, index) => {
-        const productPhotoIds = productsToPhotos
-          .filter((productToPhoto) => productToPhoto.productId === product.productId)
-          .map((productToPhoto) => productToPhoto.photoId);
-        const productPhotos = [];
-        productPhotoIds.forEach((photoId) => {
-          productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+    fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((categories) => {
+      const categoryName = props.match.params.category.replace(/_/g, ' ');
+      const thisCategory = categories.find(
+        (categoryInList) => categoryInList.categoryName === categoryName,
+      );
+      setCategory(thisCategory);
+      const { categoryId } = thisCategory;
+      const promises = [
+        fetch(`${config.apiURL}/publishedProducts/${categoryId}`).then((res) => res.json()),
+        fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
+        fetch(`${config.apiURL}/photos`).then((res) => res.json()),
+        fetch(`${config.apiURL}/productsToTags`).then((res) => res.json()),
+        fetch(`${config.apiURL}/tags`).then((res) => res.json()),
+      ];
+      Promise.all(promises).then((results) => {
+        const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
+        productsInCategory.forEach((product, index) => {
+          const productPhotoIds = productsToPhotos
+            .filter((productToPhoto) => productToPhoto.productId === product.productId)
+            .map((productToPhoto) => productToPhoto.photoId);
+          const productPhotos = [];
+          productPhotoIds.forEach((photoId) => {
+            productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+          });
+          productsInCategory[index].productPhotos = productPhotos;
+          const productTagIds = productsToTags
+            .filter((productToTag) => productToTag.productId === product.productId)
+            .map((productToTag) => productToTag.tagId);
+          const productTags = [];
+          productTagIds.forEach((tagId) => {
+            productTags.push(allTags.find((tag) => tag.tagId === tagId));
+          });
+          productsInCategory[index].productTagIds = productTags.map((tag) => tag.tagId);
         });
-        productsInCategory[index].productPhotos = productPhotos;
-        const productTagIds = productsToTags
-          .filter((productToTag) => productToTag.productId === product.productId)
-          .map((productToTag) => productToTag.tagId);
-        const productTags = [];
-        productTagIds.forEach((tagId) => {
-          productTags.push(allTags.find((tag) => tag.tagId === tagId));
-        });
-        productsInCategory[index].productTagIds = productTags.map((tag) => tag.tagId);
+        setProducts(productsInCategory);
+        setTags(allTags);
+        setLoading(false);
       });
-      setProducts(productsInCategory);
-      setTags(allTags);
-      setLoading(false);
     });
-  }, [props.match.params.id]);
+  }, [props.match.params.category]);
 
   function toggleTag(tagId) {
     const index = selectedTagIds.indexOf(tagId);
@@ -76,7 +85,7 @@ export default function Category(props) {
       <Filter tags={tags} selectedIds={selectedTagIds} toggleTag={toggleTag} />
       {productsToDisplay.length > 0 ? (
         <div>
-          <ProductsList alignment="center" products={productsToDisplay} />
+          <ProductsList alignment="center" products={productsToDisplay} category={category} />
           <p className="prices-note">* Note that prices may not be up-to-date and are subject to change at any time.</p>
         </div>
       ) : <div className="no-items"><p>No products with the selected filters.</p></div>}

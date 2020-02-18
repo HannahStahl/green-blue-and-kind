@@ -14,59 +14,68 @@ export default function Product(props) {
   const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
-    const productId = props.match.params.id;
-    const promises = [
-      fetch(`${config.apiURL}/product/${productId}`).then((res) => res.json()),
-      fetch(`${config.apiURL}/productsToPhotos/${productId}`).then((res) => res.json()),
-      fetch(`${config.apiURL}/photos`).then((res) => res.json()),
-      fetch(`${config.apiURL}/productsToTags/${productId}`).then((res) => res.json()),
-      fetch(`${config.apiURL}/tags`).then((res) => res.json()),
-      fetch(`${config.apiURL}/productsToSizes/${productId}`).then((res) => res.json()),
-      fetch(`${config.apiURL}/sizes`).then((res) => res.json()),
-      fetch(`${config.apiURL}/productsToColors/${productId}`).then((res) => res.json()),
-      fetch(`${config.apiURL}/colors`).then((res) => res.json()),
-    ];
-    Promise.all(promises).then((results) => {
-      const [
-        productDetails, productsToPhotos, photos, productsToTags, tags,
-        productsToSizes, sizes, productsToColors, colors,
-      ] = results;
-      const productPhotoIds = productsToPhotos
-        .filter((productToPhoto) => productToPhoto.productId === productId)
-        .map((productToPhoto) => productToPhoto.photoId);
-      const productPhotos = [];
-      productPhotoIds.forEach((photoId) => {
-        productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+    fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((categories) => {
+      const categoryName = props.match.params.category.replace(/_/g, ' ');
+      const { categoryId } = categories.find((category) => category.categoryName === categoryName);
+      fetch(`${config.apiURL}/publishedProducts/${categoryId}`).then((res) => res.json()).then((products) => {
+        const productName = props.match.params.product.replace(/_/g, ' ');
+        const { productId } = products.find(
+          (productInList) => productInList.productName === productName,
+        );
+        const promises = [
+          fetch(`${config.apiURL}/product/${productId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/productsToPhotos/${productId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/photos`).then((res) => res.json()),
+          fetch(`${config.apiURL}/productsToTags/${productId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/tags`).then((res) => res.json()),
+          fetch(`${config.apiURL}/productsToSizes/${productId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/sizes`).then((res) => res.json()),
+          fetch(`${config.apiURL}/productsToColors/${productId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/colors`).then((res) => res.json()),
+        ];
+        Promise.all(promises).then((results) => {
+          const [
+            productDetails, productsToPhotos, photos, productsToTags, tags,
+            productsToSizes, sizes, productsToColors, colors,
+          ] = results;
+          const productPhotoIds = productsToPhotos
+            .filter((productToPhoto) => productToPhoto.productId === productId)
+            .map((productToPhoto) => productToPhoto.photoId);
+          const productPhotos = [];
+          productPhotoIds.forEach((photoId) => {
+            productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+          });
+          productDetails.productPhotos = productPhotos;
+          const productTagIds = productsToTags
+            .filter((productToTag) => productToTag.productId === productId)
+            .map((productToTag) => productToTag.tagId);
+          const productTags = [];
+          productTagIds.forEach((tagId) => {
+            productTags.push(tags.find((tag) => tag.tagId === tagId));
+          });
+          productDetails.productTags = productTags.map((tag) => tag.tagName);
+          const productSizeIds = productsToSizes
+            .filter((productToSize) => productToSize.productId === productId)
+            .map((productToSize) => productToSize.sizeId);
+          const productSizes = [];
+          productSizeIds.forEach((sizeId) => {
+            productSizes.push(sizes.find((sizeInList) => sizeInList.sizeId === sizeId));
+          });
+          productDetails.productSizes = productSizes;
+          const productColorIds = productsToColors
+            .filter((productToColor) => productToColor.productId === productId)
+            .map((productToColor) => productToColor.colorId);
+          const productColors = [];
+          productColorIds.forEach((colorId) => {
+            productColors.push(colors.find((colorInList) => colorInList.colorId === colorId));
+          });
+          productDetails.productColors = productColors;
+          setProduct(productDetails);
+          setLoading(false);
+        });
       });
-      productDetails.productPhotos = productPhotos;
-      const productTagIds = productsToTags
-        .filter((productToTag) => productToTag.productId === productId)
-        .map((productToTag) => productToTag.tagId);
-      const productTags = [];
-      productTagIds.forEach((tagId) => {
-        productTags.push(tags.find((tag) => tag.tagId === tagId));
-      });
-      productDetails.productTags = productTags.map((tag) => tag.tagName);
-      const productSizeIds = productsToSizes
-        .filter((productToSize) => productToSize.productId === productId)
-        .map((productToSize) => productToSize.sizeId);
-      const productSizes = [];
-      productSizeIds.forEach((sizeId) => {
-        productSizes.push(sizes.find((sizeInList) => sizeInList.sizeId === sizeId));
-      });
-      productDetails.productSizes = productSizes;
-      const productColorIds = productsToColors
-        .filter((productToColor) => productToColor.productId === productId)
-        .map((productToColor) => productToColor.colorId);
-      const productColors = [];
-      productColorIds.forEach((colorId) => {
-        productColors.push(colors.find((colorInList) => colorInList.colorId === colorId));
-      });
-      productDetails.productColors = productColors;
-      setProduct(productDetails);
-      setLoading(false);
     });
-  }, [props.match.params.id]);
+  }, [props.match.params.category, props.match.params.product]);
 
   function validateForm() {
     return size && color && quantity > 0;
