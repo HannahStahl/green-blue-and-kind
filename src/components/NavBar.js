@@ -8,7 +8,7 @@ const NavBar = ({ categories, cart }) => (
   <Navbar collapseOnSelect expand="lg" fixed="top">
     <Navbar.Brand href="/">
       <img
-        alt="Green, Blue, and Kind"
+        alt="Green, Blue + Kind"
         src={`${process.env.PUBLIC_URL}/logo.png`}
         height="50"
         className="d-inline-block align-top"

@@ -13,7 +13,7 @@ const Home = ({ categories }) => (
     <ScrollableAnchor id="home">
       <Waypoint topOffset="50%">
         <div className="home-section">
-          <img src={`${process.env.PUBLIC_URL}/ocean.jpg`} alt="Green, Blue, and Kind" className="home-page-image" />
+          <img src={`${process.env.PUBLIC_URL}/home.jpg`} alt="Green, Blue + Kind" className="home-page-image" />
           <div className="home-text">
             <h1>Make your mark without leaving a mark.</h1>
             <a href="/#products" className="shop-products">
@@ -27,7 +27,11 @@ const Home = ({ categories }) => (
     <ScrollableAnchor id="bio">
       <Waypoint topOffset="50%">
         <div className="home-section bio-section">
-          <p className="bio">{content.bio}</p>
+          <div className="bio">
+            {content.bio.map((paragraph, index) => (
+              <p key={paragraph} className={index === 0 ? '' : 'bio-paragraph'}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </Waypoint>
     </ScrollableAnchor>

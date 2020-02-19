@@ -12,6 +12,12 @@ p, input, textarea, select, button {
   letter-spacing: 1.5px;
 }
 
+@keyframes fadein {
+  0% { opacity: 0; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 .page-content {
   padding: 5%;
   height: 100%;
@@ -128,7 +134,7 @@ button {
 }
 
 .home-section {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,6 +159,11 @@ button {
   padding: 10%;
   line-height: 1.9;
   font-size: 20px;
+  text-align: left;
+}
+
+.bio-paragraph {
+  padding-top: 30px;
 }
 
 .product-categories {
@@ -187,8 +198,11 @@ button {
 
 .shop-products p {
   font-size: 24px;
-  color: rgba(0, 0, 0, 0.5);
   margin-bottom: 5px;
+}
+
+.shop-products * {
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .home-text {
@@ -196,6 +210,9 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgba(250, 250, 250, 0.4);
+  padding: 50px 50px 30px 50px;
+  animation: fadein 1s;
 }
 
 .home-text h1 {
@@ -449,9 +466,9 @@ button {
   position: relative;
 }
 
-@media all and (min-width: 600px) {
-  .bio {
-    padding-bottom: calc(10% + 77px);
+@media all and (max-width: 566px) {
+  .home-text {
+    height: 100vh;
   }
 }
 
@@ -551,6 +568,10 @@ button {
   }
 }
 
+.shop-products:hover {
+  text-decoration: none;
+}
+
 @media (hover: hover) {
   .cart-item .fa-times:hover {
     color: rgba(0, 0, 0, 0.9);
@@ -563,6 +584,14 @@ button {
 
   .cart-icon:hover {
     stroke: rgba(0, 0, 0, 0.7);
+  }
+
+  .shop-products p {
+    color: rgba(0, 0, 0, 0.5);
+  }
+
+  .down-carat polygon {
+    fill: rgba(0, 0, 0, 0.5);
   }
   
   .shop-products:hover {
@@ -579,7 +608,7 @@ button {
   }
   
   .shop-products:hover > .down-carat polygon {
-    stroke: rgba(0, 0, 0, 0.7);
+    fill: rgba(0, 0, 0, 0.7);
   }
 
   .categories-list .list-group-item:hover {
