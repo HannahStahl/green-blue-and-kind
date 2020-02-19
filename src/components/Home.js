@@ -3,6 +3,7 @@ import ScrollableAnchor, { configureAnchors } from 'react-scrollable-anchor';
 import { Waypoint } from 'react-waypoint';
 import DownCarat from './DownCarat';
 import CategoriesList from './CategoriesList';
+import config from '../config';
 
 const content = require('../content.json');
 
@@ -22,7 +23,7 @@ const Home = ({ categories }) => {
       <ScrollableAnchor id="home">
         <Waypoint topOffset="50%">
           <div className="home-section">
-            <img src={`${process.env.PUBLIC_URL}/home.jpg`} alt="Green, Blue + Kind" className="home-page-image" />
+            <img src={`${config.photosCloudfrontURL}/home.jpg`} alt="Green, Blue + Kind" className="home-page-image" />
             <div id="home-text" className="home-text hidden">
               <h1>Make your mark without leaving a mark.</h1>
               <a href="/#products" className="shop-products">

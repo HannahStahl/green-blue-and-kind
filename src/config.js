@@ -17,5 +17,6 @@ const config = process.env.REACT_APP_STAGE === 'prod'
 
 export default {
   // Add common config values here
+  photosCloudfrontURL: 'https://d3kp4vtpq67hh9.cloudfront.net',
   ...config,
 };
