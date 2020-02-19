@@ -205,7 +205,11 @@ button {
   color: rgba(0, 0, 0, 0.7);
 }
 
-.home-text {
+.home-text.hidden {
+  display: none;
+}
+
+.home-text.visible {
   display: flex;
   flex-direction: column;
   justify-content: center;
