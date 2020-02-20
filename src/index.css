@@ -21,7 +21,7 @@ p, input, textarea, select, button {
 .page-content {
   padding: 5%;
   height: 100%;
-  min-height: calc(100vh - 77px);
+  min-height: calc(100vh - 97px);
   width: 100%;
   z-index: -1;
   display: flex;
@@ -172,7 +172,7 @@ button {
   justify-content: center;
   padding: 10%;
   background-color: rgb(225, 225, 230);
-  height: 100%;
+  min-height: calc(100vh - 97px);
 }
 
 .cart-icon {
