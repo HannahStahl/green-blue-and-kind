@@ -10,7 +10,7 @@ const NavBar = ({ categories, cart }) => (
       <img
         alt="Green, Blue + Kind"
         src={`${process.env.PUBLIC_URL}/logo.png`}
-        height="50"
+        height="70"
         className="d-inline-block align-top"
       />
     </Navbar.Brand>

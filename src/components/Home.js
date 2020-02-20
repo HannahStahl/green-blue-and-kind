@@ -7,7 +7,7 @@ import config from '../config';
 
 const content = require('../content.json');
 
-configureAnchors({ offset: -77 });
+configureAnchors({ offset: -97 });
 
 const Home = ({ categories }) => {
   function showText() {
