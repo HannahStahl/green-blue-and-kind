@@ -12,6 +12,7 @@ import Category from './components/Category';
 import Product from './components/Product';
 import NotFound from './components/NotFound';
 import NavBar from './components/NavBar';
+// import Banner from './components/Banner';
 import Footer from './components/Footer';
 import config from './config';
 
@@ -44,6 +45,7 @@ const App = withRouter(() => {
   return (
     <>
       <NavBar categories={categories} cart={cart} />
+      {/* <Banner /> */}
       <div>
         <Routes categories={categories} updateCart={updateCart} />
       </div>
