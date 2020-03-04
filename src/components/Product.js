@@ -132,6 +132,18 @@ export default function Product(props) {
     }
   }
 
+  function decrementQuantity() {
+    if (quantity > 1) {
+      setQuantity(parseInt(quantity) - 1);
+      setButtonText('Add to Cart');
+    }
+  }
+
+  function incrementQuantity() {
+    setQuantity(parseInt(quantity) + 1);
+    setButtonText('Add to Cart');
+  }
+
   return loading ? <LoadingSpinner /> : (
     <div className="page-content product-page">
       <div className="product-info">
@@ -199,13 +211,15 @@ export default function Product(props) {
                 ))}
               </FormControl>
             </FormGroup>
-            <FormGroup controlId="quantity">
+            <FormGroup controlId="quantity" className="quantity-form-group">
+              <div className="quantity-increment left" onClick={decrementQuantity}><p>-</p></div>
               <FormControl
                 type="text"
                 value={quantity}
                 onChange={updateQuantity}
-                className={parseInt(quantity) > 0 ? '' : 'gray'}
+                className={parseInt(quantity) > 0 ? 'quantity-input' : 'quantity-input gray'}
               />
+              <div className="quantity-increment right" onClick={incrementQuantity}><p>+</p></div>
             </FormGroup>
             <Button
               block
