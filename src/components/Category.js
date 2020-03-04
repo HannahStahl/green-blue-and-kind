@@ -11,12 +11,14 @@ export default function Category(props) {
   const [selectedTagIds, setSelectedTagIds] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { match } = props;
+
   useEffect(() => {
     fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((categories) => {
-      const categoryName = props.match.params.category.replace(/_/g, ' ');
-      const thisCategory = categories.find(
-        (categoryInList) => categoryInList.categoryName === categoryName,
-      );
+      const categoryName = match.params.category.replace(/_/g, ' ');
+      const thisCategory = categories.find((categoryInList) => (
+        categoryInList.categoryName.toLowerCase() === categoryName.toLowerCase()
+      ));
       setCategory(thisCategory);
       const { categoryId } = thisCategory;
       const promises = [
@@ -51,7 +53,7 @@ export default function Category(props) {
         setLoading(false);
       });
     });
-  }, [props.match.params.category]);
+  }, [match.params.category]);
 
   function toggleTag(tagId) {
     const index = selectedTagIds.indexOf(tagId);

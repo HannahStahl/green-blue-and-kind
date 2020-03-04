@@ -17,12 +17,14 @@ export default function Product(props) {
   useEffect(() => {
     fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((categories) => {
       const categoryName = props.match.params.category.replace(/_/g, ' ');
-      const { categoryId } = categories.find((category) => category.categoryName === categoryName);
+      const { categoryId } = categories.find((category) => (
+        category.categoryName.toLowerCase() === categoryName.toLowerCase()
+      ));
       fetch(`${config.apiURL}/publishedProducts/${categoryId}`).then((res) => res.json()).then((products) => {
         const productName = props.match.params.product.replace(/_/g, ' ');
-        const { productId } = products.find(
-          (productInList) => productInList.productName === productName,
-        );
+        const { productId } = products.find((productInList) => (
+          productInList.productName.toLowerCase() === productName.toLowerCase()
+        ));
         const promises = [
           fetch(`${config.apiURL}/product/${productId}`).then((res) => res.json()),
           fetch(`${config.apiURL}/productsToPhotos/${productId}`).then((res) => res.json()),
