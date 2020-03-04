@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import config from '../config';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function Cart({ updateCart }) {
   const [categories, setCategories] = useState([]);
@@ -267,7 +268,7 @@ export default function Cart({ updateCart }) {
     );
   }
 
-  return !loading && (
+  return loading ? <LoadingSpinner /> : (
     <div className="page-content cart-page">
       {items.length > 0 && renderCart()}
       {renderForm()}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ProductsList from './ProductsList';
 import config from '../config';
 import Filter from './Filter';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function Category(props) {
   const [category, setCategory] = useState({});
@@ -80,7 +81,7 @@ export default function Category(props) {
 
   const productsToDisplay = products ? products.filter(shouldDisplayProduct) : [];
 
-  return !loading && (
+  return loading ? <LoadingSpinner /> : (
     <div className="page-content category-page">
       <Filter tags={tags} selectedIds={selectedTagIds} toggleTag={toggleTag} />
       {productsToDisplay.length > 0 ? (

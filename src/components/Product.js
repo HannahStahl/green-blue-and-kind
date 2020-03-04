@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import config from '../config';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function Product(props) {
   const [product, setProduct] = useState({});
@@ -131,7 +132,7 @@ export default function Product(props) {
     }
   }
 
-  return !loading && (
+  return loading ? <LoadingSpinner /> : (
     <div className="page-content product-page">
       <div className="product-info">
         <div className="product-photos">
