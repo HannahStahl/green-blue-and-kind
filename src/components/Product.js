@@ -8,7 +8,7 @@ export default function Product(props) {
   const [product, setProduct] = useState({});
   const [size, setSize] = useState(null);
   const [color, setColor] = useState(null);
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [buttonText, setButtonText] = useState('Add to Cart');
   const [photoIndex, setPhotoIndex] = useState(0);
@@ -109,7 +109,7 @@ export default function Product(props) {
     localStorage.setItem('cart', JSON.stringify(cart));
     setSize(null);
     setColor(null);
-    setQuantity(0);
+    setQuantity(1);
     setButtonText('Added to Cart');
     props.updateCart();
   }
