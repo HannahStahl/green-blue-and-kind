@@ -13,7 +13,7 @@ export default function Cart({ updateCart }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [requestSent, setRequestSent] = useState(false);
+  const [buttonText, setButtonText] = useState('Submit Request');
 
   useEffect(() => {
     let cart = localStorage.getItem('cart');
@@ -93,17 +93,19 @@ export default function Cart({ updateCart }) {
 
   function updateName(e) {
     setName(e.target.value);
-    setRequestSent(false);
+    setButtonText(items.length > 0 ? 'Submit Request' : 'Send Message');
   }
 
   function updateEmail(e) {
     setEmail(e.target.value);
-    setRequestSent(false);
+    setButtonText('Submit Request');
+    setButtonText(items.length > 0 ? 'Submit Request' : 'Send Message');
   }
 
   function updateMessage(e) {
     setMessage(e.target.value);
-    setRequestSent(false);
+    setButtonText('Submit Request');
+    setButtonText(items.length > 0 ? 'Submit Request' : 'Send Message');
   }
 
   function validateForm() {
@@ -112,6 +114,7 @@ export default function Cart({ updateCart }) {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setButtonText(items.length > 0 ? 'Submitting Request...' : 'Sending Message...');
     const cart = {
       items: items.map((item) => ({
         name: item.productName,
@@ -130,14 +133,15 @@ export default function Cart({ updateCart }) {
       }),
     }).then((response) => response.json()).then((json) => {
       if (json.MessageId) {
+        setButtonText(items.length > 0 ? 'Submitted Request' : 'Sent Message');
         setName('');
         setEmail('');
         setMessage('');
         setItems([]);
-        setRequestSent(true);
         localStorage.setItem('cart', '[]');
         updateCart();
       } else {
+        setButtonText(items.length > 0 ? 'Submit Request' : 'Send Message');
         window.alert('An error occurred with our contact form. Please send an email directly to shana@gbkproducts.com!');
       }
     });
@@ -195,19 +199,6 @@ export default function Cart({ updateCart }) {
     );
   }
 
-  let buttonText;
-  if (items.length > 0) {
-    if (requestSent) {
-      buttonText = 'Submitted Request';
-    } else {
-      buttonText = 'Submit Request';
-    }
-  } else if (requestSent) {
-    buttonText = 'Sent Message';
-  } else {
-    buttonText = 'Send Message';
-  }
-
   function renderForm() {
     return (
       <div>
@@ -251,7 +242,7 @@ export default function Cart({ updateCart }) {
               variant="outline-dark"
               disabled={!validateForm()}
             >
-              {requestSent && <i className="fas fa-check" />}
+              {(buttonText === 'Submitted Request' || buttonText === 'Sent Message') && <i className="fas fa-check" />}
               {buttonText}
             </Button>
           </div>
