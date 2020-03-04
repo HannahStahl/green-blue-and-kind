@@ -234,8 +234,8 @@ button {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  padding: 10%;
-  background-color: rgb(225, 225, 230);
+  padding: 8%;
+  background-color: rgb(179, 216, 229);
   min-height: calc(100vh - 97px);
 }
 
@@ -299,7 +299,7 @@ button {
   width: 300px;
   height: 300px;
   padding: 15px;
-  margin: 30px;
+  margin: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
