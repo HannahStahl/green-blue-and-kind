@@ -9,22 +9,22 @@ export default function ProductsList({ category, products }) {
       <ListGroup>
         {products.map((product) => (
           <LinkContainer
-            key={product.productId}
-            to={`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.productName.toLowerCase().replace(/ /g, '_')}`}
+            key={product.itemId}
+            to={`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`}
           >
             <ListGroupItem>
-              {product.productPhotos[0].photoName && (
-                <img src={`${config.cloudfrontURL}/${product.productPhotos[0].photoName}`} alt={product.productName} />
+              {product.itemPhotos[0].photoName && (
+                <img src={`${config.cloudfrontURL}/${product.itemPhotos[0].photoName}`} alt={product.itemName} />
               )}
               <div className="item-name">
-                <h4>{product.productName.trim().split('\n')[0]}</h4>
+                <h4>{product.itemName.trim().split('\n')[0]}</h4>
                 {
-                  product.productOnSale ? (
+                  product.itemOnSale ? (
                     <p>
-                      <strike>{`$${product.productPrice}`}</strike>
-                      <span className="sale-price">{` $${product.productSalePrice}`}</span>
+                      <strike>{`$${product.itemPrice}`}</strike>
+                      <span className="sale-price">{` $${product.itemSalePrice}`}</span>
                     </p>
-                  ) : <p>{`$${product.productPrice}`}</p>
+                  ) : <p>{`$${product.itemPrice}`}</p>
                 }
               </div>
             </ListGroupItem>

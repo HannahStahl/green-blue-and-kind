@@ -7,7 +7,7 @@ export default function Filter({ tags, selectedIds, toggleTag }) {
   }, [selectedIds]);
   return (
     <span className="filter">
-      <span className="filter-label"><p>Filter:</p></span>
+      <span className="filter-label"><p>{tags.length > 0 ? 'Filter:' : ''}</p></span>
       <span className="tags">
         {tags.map((tag) => {
           const selected = selectedTagIds.includes(tag.tagId);

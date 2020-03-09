@@ -21,31 +21,31 @@ export default function Cart({ updateCart }) {
       cart = JSON.parse(cart);
       if (cart.length > 0) {
         const promises = [
-          fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()),
-          fetch(`${config.apiURL}/publishedProducts`).then((res) => res.json()),
-          fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
-          fetch(`${config.apiURL}/photos`).then((res) => res.json()),
-          fetch(`${config.apiURL}/sizes`).then((res) => res.json()),
-          fetch(`${config.apiURL}/colors`).then((res) => res.json()),
+          fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/publishedItems/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToPhotos/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/sizes/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/colors/${config.userID}`).then((res) => res.json()),
         ];
         Promise.all(promises).then((results) => {
-          const [allCategories, allProducts, productsToPhotos, photos, sizes, colors] = results;
+          const [allCategories, allProducts, itemsToPhotos, photos, sizes, colors] = results;
           setCategories(allCategories);
           setProducts(allProducts);
           cart.forEach((item, index) => {
             const {
-              productName, productPrice, productOnSale, productSalePrice,
-            } = allProducts.find((product) => product.productId === item.productId);
-            const price = productOnSale ? productSalePrice : productPrice;
+              itemName, itemPrice, itemOnSale, itemSalePrice,
+            } = allProducts.find((product) => product.itemId === item.itemId);
+            const price = itemOnSale ? itemSalePrice : itemPrice;
             const { sizeName } = sizes.find((size) => size.sizeId === item.sizeId);
             const { colorName } = colors.find((color) => color.colorId === item.colorId);
-            const { photoId } = productsToPhotos.find(
-              (productToPhoto) => productToPhoto.productId === item.productId,
+            const { photoId } = itemsToPhotos.find(
+              (itemToPhoto) => itemToPhoto.itemId === item.itemId,
             );
             const { photoName } = photos.find((photo) => photo.photoId === photoId);
             cart[index] = {
               ...item,
-              productName,
+              itemName,
               sizeName,
               colorName,
               photoName,
@@ -117,7 +117,7 @@ export default function Cart({ updateCart }) {
     setButtonText(items.length > 0 ? 'Submitting Request...' : 'Sending Message...');
     const cart = {
       items: items.map((item) => ({
-        name: item.productName,
+        name: item.itemName,
         size: item.sizeName,
         color: item.colorName,
         quantity: item.quantity,
@@ -147,32 +147,32 @@ export default function Cart({ updateCart }) {
     });
   }
 
-  function getProductURL(productId) {
+  function getProductURL(itemId) {
     const product = products.find(
-      (productInList) => productInList.productId === productId,
+      (productInList) => productInList.itemId === itemId,
     );
     const category = categories.find(
       (categoryInList) => categoryInList.categoryId === product.categoryId,
     );
-    return `/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.productName.toLowerCase().replace(/ /g, '_')}`;
+    return `/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`;
   }
 
   function renderCart() {
     return (
       <div className="cart-items">
         {items.map((item, index) => {
-          const productURL = getProductURL(item.productId);
+          const productURL = getProductURL(item.itemId);
           return (
-            <div key={`${item.productId}-${item.sizeId}-${item.colorId}`} className="cart-item">
+            <div key={`${item.itemId}-${item.sizeId}-${item.colorId}`} className="cart-item">
               <div><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></div>
               <div>
                 <a href={productURL}>
-                  <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.productName} />
+                  <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.itemName} />
                 </a>
               </div>
               <div className="product-details">
                 <a href={productURL} className="product-name">
-                  <h4>{item.productName}</h4>
+                  <h4>{item.itemName}</h4>
                 </a>
                 <p className="size">{`Size: ${item.sizeName}`}</p>
                 <p className="color">{`Color: ${item.colorName}`}</p>

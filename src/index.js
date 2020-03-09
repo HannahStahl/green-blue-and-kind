@@ -36,7 +36,7 @@ const App = withRouter(() => {
   }
 
   useEffect(() => {
-    fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((json) => {
+    fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((json) => {
       setCategories(json);
     });
     updateCart();

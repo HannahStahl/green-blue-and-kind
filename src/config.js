@@ -1,13 +1,15 @@
 const dev = {
-  apiURL: 'https://qwppkge4a7.execute-api.us-east-1.amazonaws.com/dev',
-  cloudfrontURL: 'https://d1emv4i9ahobax.cloudfront.net',
+  apiURL: 'https://dlnum6f7kj.execute-api.us-east-1.amazonaws.com/dev',
+  cloudfrontURL: 'https://d1c360lneb6ftg.cloudfront.net',
   emailURL: 'https://hol5104cj2.execute-api.us-east-1.amazonaws.com/dev/email/send',
+  userID: 'us-east-1:34ee9094-c95a-4f8f-b2c2-551ef33bd49f',
 };
 
 const prod = {
-  apiURL: 'https://3jw0egh7y8.execute-api.us-east-1.amazonaws.com/prod',
-  cloudfrontURL: 'https://d3v8t7grqk8z3g.cloudfront.net',
+  apiURL: 'https://dlnum6f7kj.execute-api.us-east-1.amazonaws.com/dev', // TODO change to prod URL
+  cloudfrontURL: 'https://dd7h6rpqhh194.cloudfront.net',
   emailURL: 'https://2dkw1qwaja.execute-api.us-east-1.amazonaws.com/prod/email/send',
+  userID: 'us-east-1:34ee9094-c95a-4f8f-b2c2-551ef33bd49f', // TODO change to prod user ID
 };
 
 // Default to dev if not set

@@ -15,26 +15,26 @@ export default function Product(props) {
   const [photoIndex, setPhotoIndex] = useState(0);
 
   useEffect(() => {
-    fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((categories) => {
+    fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((categories) => {
       const categoryName = props.match.params.category.replace(/_/g, ' ');
       const { categoryId } = categories.find((category) => (
         category.categoryName.toLowerCase() === categoryName.toLowerCase()
       ));
-      fetch(`${config.apiURL}/publishedProducts/${categoryId}`).then((res) => res.json()).then((products) => {
+      fetch(`${config.apiURL}/publishedItems/${config.userID}/${categoryId}`).then((res) => res.json()).then((products) => {
         const productName = props.match.params.product.replace(/_/g, ' ');
-        const { productId } = products.find((productInList) => (
-          productInList.productName.toLowerCase() === productName.toLowerCase()
+        const { itemId } = products.find((productInList) => (
+          productInList.itemName.toLowerCase() === productName.toLowerCase()
         ));
         const promises = [
-          fetch(`${config.apiURL}/product/${productId}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/productsToPhotos/${productId}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/photos`).then((res) => res.json()),
-          fetch(`${config.apiURL}/productsToTags/${productId}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/tags`).then((res) => res.json()),
-          fetch(`${config.apiURL}/productsToSizes/${productId}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/sizes`).then((res) => res.json()),
-          fetch(`${config.apiURL}/productsToColors/${productId}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/colors`).then((res) => res.json()),
+          fetch(`${config.apiURL}/item/${config.userID}/${itemId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToPhotos/${config.userID}/${itemId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToTags/${config.userID}/${itemId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/tags/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToSizes/${config.userID}/${itemId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/sizes/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToColors/${config.userID}/${itemId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/colors/${config.userID}`).then((res) => res.json()),
         ];
         Promise.all(promises).then((results) => {
           const [
@@ -42,37 +42,37 @@ export default function Product(props) {
             productsToSizes, sizes, productsToColors, colors,
           ] = results;
           const productPhotoIds = productsToPhotos
-            .filter((productToPhoto) => productToPhoto.productId === productId)
+            .filter((productToPhoto) => productToPhoto.itemId === itemId)
             .map((productToPhoto) => productToPhoto.photoId);
           const productPhotos = [];
           productPhotoIds.forEach((photoId) => {
             productPhotos.push(photos.find((photo) => photo.photoId === photoId));
           });
-          productDetails.productPhotos = productPhotos;
+          productDetails.itemPhotos = productPhotos;
           const productTagIds = productsToTags
-            .filter((productToTag) => productToTag.productId === productId)
+            .filter((productToTag) => productToTag.itemId === itemId)
             .map((productToTag) => productToTag.tagId);
           const productTags = [];
           productTagIds.forEach((tagId) => {
             productTags.push(tags.find((tag) => tag.tagId === tagId));
           });
-          productDetails.productTags = productTags.map((tag) => tag.tagName);
+          productDetails.itemTags = productTags.map((tag) => tag.tagName);
           const productSizeIds = productsToSizes
-            .filter((productToSize) => productToSize.productId === productId)
+            .filter((productToSize) => productToSize.itemId === itemId)
             .map((productToSize) => productToSize.sizeId);
           const productSizes = [];
           productSizeIds.forEach((sizeId) => {
             productSizes.push(sizes.find((sizeInList) => sizeInList.sizeId === sizeId));
           });
-          productDetails.productSizes = productSizes;
+          productDetails.itemSizes = productSizes;
           const productColorIds = productsToColors
-            .filter((productToColor) => productToColor.productId === productId)
+            .filter((productToColor) => productToColor.itemId === itemId)
             .map((productToColor) => productToColor.colorId);
           const productColors = [];
           productColorIds.forEach((colorId) => {
             productColors.push(colors.find((colorInList) => colorInList.colorId === colorId));
           });
-          productDetails.productColors = productColors;
+          productDetails.itemColors = productColors;
           setProduct(productDetails);
           setLoading(false);
         });
@@ -88,14 +88,14 @@ export default function Product(props) {
     event.preventDefault();
     let cart = JSON.parse(localStorage.getItem('cart'));
     const newCartItem = {
-      productId: product.productId,
+      itemId: product.itemId,
       sizeId: size,
       colorId: color,
       quantity: parseInt(quantity),
     };
     if (cart) {
       const index = cart.findIndex((item) => (
-        item.productId === newCartItem.productId
+        item.itemId === newCartItem.itemId
         && item.sizeId === newCartItem.sizeId
         && item.colorId === newCartItem.colorId
       ));
@@ -151,35 +151,35 @@ export default function Product(props) {
       <div className="product-info">
         <div className="product-photos">
           <img
-            key={product.productPhotos[photoIndex].photoId}
-            src={`${config.cloudfrontURL}/${product.productPhotos[photoIndex].photoName}`}
-            alt={product.productName}
+            key={product.itemPhotos[photoIndex].photoId}
+            src={`${config.cloudfrontURL}/${product.itemPhotos[photoIndex].photoName}`}
+            alt={product.itemName}
             className="product-photo"
           />
-          {product.productPhotos.map((photo, index) => (
+          {product.itemPhotos.map((photo, index) => (
             <img
               key={photo.photoId}
               src={`${config.cloudfrontURL}/${photo.photoName}`}
-              alt={`${product.productName} ${index}`}
+              alt={`${product.itemName} ${index}`}
               className="product-thumbnail"
               onClick={() => setPhotoIndex(index)}
             />
           ))}
         </div>
         <div className="product-details">
-          <h1>{product.productName}</h1>
+          <h1>{product.itemName}</h1>
           <div className="product-price">
-            {product.productOnSale ? (
+            {product.itemOnSale ? (
               <p>
-                <strike>{`$${product.productPrice}`}</strike>
-                <span className="sale-price">{` $${product.productSalePrice}`}</span>
+                <strike>{`$${product.itemPrice}`}</strike>
+                <span className="sale-price">{` $${product.itemSalePrice}`}</span>
               </p>
-            ) : <p>{`$${product.productPrice}`}</p>}
+            ) : <p>{`$${product.itemPrice}`}</p>}
           </div>
-          <p className="product-description">{product.productDescription}</p>
-          {product.productTags.length > 0 && (
+          <p className="product-description">{product.itemDescription}</p>
+          {product.itemTags.length > 0 && (
             <div className="product-tags">
-              {product.productTags.map((tag) => <div key={tag} className="product-tag">{tag}</div>)}
+              {product.itemTags.map((tag) => <div key={tag} className="product-tag">{tag}</div>)}
             </div>
           )}
           <form onSubmit={handleSubmit} className="product-form">
@@ -191,7 +191,7 @@ export default function Product(props) {
                 className={size ? '' : 'gray'}
               >
                 <option key="" value="" disabled>Size</option>
-                {product.productSizes.map((productSize) => (
+                {product.itemSizes.map((productSize) => (
                   <option key={productSize.sizeId} value={productSize.sizeId}>
                     {productSize.sizeName}
                   </option>
@@ -206,7 +206,7 @@ export default function Product(props) {
                 className={color ? '' : 'gray'}
               >
                 <option key="" value="" disabled>Color</option>
-                {product.productColors.map((productColor) => (
+                {product.itemColors.map((productColor) => (
                   <option key={productColor.colorId} value={productColor.colorId}>
                     {productColor.colorName}
                   </option>

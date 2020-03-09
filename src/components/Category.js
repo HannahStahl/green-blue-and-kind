@@ -14,7 +14,7 @@ export default function Category(props) {
   const { match } = props;
 
   useEffect(() => {
-    fetch(`${config.apiURL}/publishedCategories`).then((res) => res.json()).then((categories) => {
+    fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((categories) => {
       const categoryName = match.params.category.replace(/_/g, ' ');
       const thisCategory = categories.find((categoryInList) => (
         categoryInList.categoryName.toLowerCase() === categoryName.toLowerCase()
@@ -22,31 +22,31 @@ export default function Category(props) {
       setCategory(thisCategory);
       const { categoryId } = thisCategory;
       const promises = [
-        fetch(`${config.apiURL}/publishedProducts/${categoryId}`).then((res) => res.json()),
-        fetch(`${config.apiURL}/productsToPhotos`).then((res) => res.json()),
-        fetch(`${config.apiURL}/photos`).then((res) => res.json()),
-        fetch(`${config.apiURL}/productsToTags`).then((res) => res.json()),
-        fetch(`${config.apiURL}/tags`).then((res) => res.json()),
+        fetch(`${config.apiURL}/publishedItems/${config.userID}/${categoryId}`).then((res) => res.json()),
+        fetch(`${config.apiURL}/itemsToPhotos/${config.userID}`).then((res) => res.json()),
+        fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
+        fetch(`${config.apiURL}/itemsToTags/${config.userID}`).then((res) => res.json()),
+        fetch(`${config.apiURL}/tags/${config.userID}`).then((res) => res.json()),
       ];
       Promise.all(promises).then((results) => {
         const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
         productsInCategory.forEach((product, index) => {
           const productPhotoIds = productsToPhotos
-            .filter((productToPhoto) => productToPhoto.productId === product.productId)
+            .filter((productToPhoto) => productToPhoto.itemId === product.itemId)
             .map((productToPhoto) => productToPhoto.photoId);
           const productPhotos = [];
           productPhotoIds.forEach((photoId) => {
             productPhotos.push(photos.find((photo) => photo.photoId === photoId));
           });
-          productsInCategory[index].productPhotos = productPhotos;
+          productsInCategory[index].itemPhotos = productPhotos;
           const productTagIds = productsToTags
-            .filter((productToTag) => productToTag.productId === product.productId)
+            .filter((productToTag) => productToTag.itemId === product.itemId)
             .map((productToTag) => productToTag.tagId);
           const productTags = [];
           productTagIds.forEach((tagId) => {
             productTags.push(allTags.find((tag) => tag.tagId === tagId));
           });
-          productsInCategory[index].productTagIds = productTags.map((tag) => tag.tagId);
+          productsInCategory[index].itemTagIds = productTags.map((tag) => tag.tagId);
         });
         setProducts(productsInCategory);
         setTags(allTags);
@@ -71,8 +71,8 @@ export default function Category(props) {
     }
     let selectedTagIdFound = false;
     let i = 0;
-    while (i < product.productTagIds.length && !selectedTagIdFound) {
-      const productTagId = product.productTagIds[i];
+    while (i < product.itemTagIds.length && !selectedTagIdFound) {
+      const productTagId = product.itemTagIds[i];
       if (selectedTagIds.includes(productTagId)) {
         selectedTagIdFound = true;
       }
