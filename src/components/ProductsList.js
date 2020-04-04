@@ -10,7 +10,7 @@ export default function ProductsList({ category, products }) {
         {products.map((product) => (
           <LinkContainer
             key={product.itemId}
-            to={`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`}
+            to={escape(`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`)}
           >
             <ListGroupItem>
               {product.itemPhotos[0].photoName && (

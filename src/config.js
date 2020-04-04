@@ -2,7 +2,7 @@ const dev = {
   apiURL: 'https://dlnum6f7kj.execute-api.us-east-1.amazonaws.com/dev',
   cloudfrontBaseURL: 'https://d1ljva6zkf6zjh.cloudfront.net',
   emailURL: 'https://hol5104cj2.execute-api.us-east-1.amazonaws.com/dev/email/send',
-  userID: 'us-east-1:34ee9094-c95a-4f8f-b2c2-551ef33bd49f',
+  userID: 'us-east-1:0c9864e8-7db2-45fc-9c5a-ed2c11e2d9cf',
 };
 
 const prod = {

@@ -6,6 +6,8 @@ import config from '../config';
 import LoadingSpinner from './LoadingSpinner';
 
 export default function Product(props) {
+  const { match } = props;
+
   const [product, setProduct] = useState({});
   const [size, setSize] = useState(null);
   const [color, setColor] = useState(null);
@@ -16,12 +18,12 @@ export default function Product(props) {
 
   useEffect(() => {
     fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((categories) => {
-      const categoryName = props.match.params.category.replace(/_/g, ' ');
+      const categoryName = unescape(match.params.category).replace(/_/g, ' ');
       const { categoryId } = categories.find((category) => (
         category.categoryName.toLowerCase() === categoryName.toLowerCase()
       ));
       fetch(`${config.apiURL}/publishedItems/${config.userID}/${categoryId}`).then((res) => res.json()).then((products) => {
-        const productName = props.match.params.product.replace(/_/g, ' ');
+        const productName = unescape(match.params.product).replace(/_/g, ' ');
         const { itemId } = products.find((productInList) => (
           productInList.itemName.toLowerCase() === productName.toLowerCase()
         ));
@@ -78,7 +80,7 @@ export default function Product(props) {
         });
       });
     });
-  }, [props.match.params.category, props.match.params.product]);
+  }, [match.params.category, match.params.product]);
 
   function validateForm() {
     return size && color && quantity > 0;

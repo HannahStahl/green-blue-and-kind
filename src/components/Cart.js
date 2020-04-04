@@ -154,7 +154,7 @@ export default function Cart({ updateCart }) {
     const category = categories.find(
       (categoryInList) => categoryInList.categoryId === product.categoryId,
     );
-    return `/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`;
+    return escape(`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`);
   }
 
   function renderCart() {

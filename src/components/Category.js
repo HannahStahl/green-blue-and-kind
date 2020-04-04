@@ -15,7 +15,7 @@ export default function Category(props) {
 
   useEffect(() => {
     fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((categories) => {
-      const categoryName = match.params.category.replace(/_/g, ' ');
+      const categoryName = unescape(match.params.category).replace(/_/g, ' ');
       const thisCategory = categories.find((categoryInList) => (
         categoryInList.categoryName.toLowerCase() === categoryName.toLowerCase()
       ));
