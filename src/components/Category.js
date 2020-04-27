@@ -19,39 +19,42 @@ export default function Category(props) {
       const thisCategory = categories.find((categoryInList) => (
         categoryInList.categoryName.toLowerCase() === categoryName.toLowerCase()
       ));
-      setCategory(thisCategory);
-      const { categoryId } = thisCategory;
-      const promises = [
-        fetch(`${config.apiURL}/publishedItems/${config.userID}/${categoryId}`).then((res) => res.json()),
-        fetch(`${config.apiURL}/itemsToPhotos/${config.userID}`).then((res) => res.json()),
-        fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
-        fetch(`${config.apiURL}/itemsToTags/${config.userID}`).then((res) => res.json()),
-        fetch(`${config.apiURL}/tags/${config.userID}`).then((res) => res.json()),
-      ];
-      Promise.all(promises).then((results) => {
-        const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
-        productsInCategory.forEach((product, index) => {
-          const productPhotoIds = productsToPhotos
-            .filter((productToPhoto) => productToPhoto.itemId === product.itemId)
-            .map((productToPhoto) => productToPhoto.photoId);
-          const productPhotos = [];
-          productPhotoIds.forEach((photoId) => {
-            productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+      if (!thisCategory) window.location.pathname = '/page-not-found';
+      else {
+        setCategory(thisCategory);
+        const { categoryId } = thisCategory;
+        const promises = [
+          fetch(`${config.apiURL}/publishedItems/${config.userID}/${categoryId}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToPhotos/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/itemsToTags/${config.userID}`).then((res) => res.json()),
+          fetch(`${config.apiURL}/tags/${config.userID}`).then((res) => res.json()),
+        ];
+        Promise.all(promises).then((results) => {
+          const [productsInCategory, productsToPhotos, photos, productsToTags, allTags] = results;
+          productsInCategory.forEach((product, index) => {
+            const productPhotoIds = productsToPhotos
+              .filter((productToPhoto) => productToPhoto.itemId === product.itemId)
+              .map((productToPhoto) => productToPhoto.photoId);
+            const productPhotos = [];
+            productPhotoIds.forEach((photoId) => {
+              productPhotos.push(photos.find((photo) => photo.photoId === photoId));
+            });
+            productsInCategory[index].itemPhotos = productPhotos;
+            const productTagIds = productsToTags
+              .filter((productToTag) => productToTag.itemId === product.itemId)
+              .map((productToTag) => productToTag.tagId);
+            const productTags = [];
+            productTagIds.forEach((tagId) => {
+              productTags.push(allTags.find((tag) => tag.tagId === tagId));
+            });
+            productsInCategory[index].itemTagIds = productTags.map((tag) => tag.tagId);
           });
-          productsInCategory[index].itemPhotos = productPhotos;
-          const productTagIds = productsToTags
-            .filter((productToTag) => productToTag.itemId === product.itemId)
-            .map((productToTag) => productToTag.tagId);
-          const productTags = [];
-          productTagIds.forEach((tagId) => {
-            productTags.push(allTags.find((tag) => tag.tagId === tagId));
-          });
-          productsInCategory[index].itemTagIds = productTags.map((tag) => tag.tagId);
+          setProducts(productsInCategory);
+          setTags(allTags);
+          setLoading(false);
         });
-        setProducts(productsInCategory);
-        setTags(allTags);
-        setLoading(false);
-      });
+      }
     });
   }, [match.params.category]);
 
