@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import config from '../config';
+import { constructEmailHtml } from '../util';
 import LoadingSpinner from './LoadingSpinner';
 
 export default function Cart({ updateCart }) {
@@ -129,7 +130,12 @@ export default function Cart({ updateCart }) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name, email, cart, message,
+        name,
+        html: constructEmailHtml(name, message, cart),
+        userEmail: email,
+        clientEmail: config.emailAddress,
+        siteDomain: window.location.origin,
+        orderNotification: cart.items.length > 0,
       }),
     }).then((response) => response.json()).then((json) => {
       if (json.MessageId) {
