@@ -13,8 +13,8 @@ export default function Cart({ categories, products, updateCart }) {
     if (cart.length > 0) {
       cart.forEach((item, index) => {
         const product = products.find(({ _id }) => _id === item.itemId);
-        const size = product.sizes.find(({ _id }) => _id === item.sizeId);
-        const color = product.colors.find(({ _id }) => _id === item.colorId);
+        const size = product && product.sizes.find(({ _id }) => _id === item.sizeId);
+        const color = product && product.colors.find(({ _id }) => _id === item.colorId);
         if (!product || !size || !color) {
           // One or more IDs are invalid; clear cart
           localStorage.setItem('cart', '[]');
