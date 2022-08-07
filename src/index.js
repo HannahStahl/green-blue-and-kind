@@ -14,21 +14,27 @@ import NotFound from './components/NotFound';
 import NavBar from './components/NavBar';
 // import Banner from './components/Banner';
 import Footer from './components/Footer';
+import LoadingSpinner from './components/LoadingSpinner';
 import config from './config';
 
-const Routes = ({ categories, updateCart }) => (
+const Routes = ({
+  categories, products, tags, updateCart,
+}) => (
   <Switch>
     <Route path="/" exact render={(props) => <Home {...props} categories={categories} />} />
-    <Route path="/items/:category" exact render={(props) => <Category {...props} />} />
-    <Route path="/items/:category/:product" exact render={(props) => <Product {...props} updateCart={updateCart} />} />
-    <Route path="/cart" exact render={(props) => <Cart {...props} updateCart={updateCart} />} />
+    <Route path="/items/:category" exact render={(props) => <Category {...props} categories={categories} tags={tags} />} />
+    <Route path="/items/:category/:product" exact render={(props) => <Product {...props} categories={categories} updateCart={updateCart} />} />
+    <Route path="/cart" exact render={(props) => <Cart {...props} categories={categories} products={products} updateCart={updateCart} />} />
     <Route component={NotFound} />
   </Switch>
 );
 
 const App = withRouter(() => {
   const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [tags, setTags] = useState([]);
   const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   function updateCart() {
     const cartStr = localStorage.getItem('cart');
@@ -36,18 +42,76 @@ const App = withRouter(() => {
   }
 
   useEffect(() => {
-    fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((json) => {
-      setCategories(json);
-    });
+    const productFields = `
+      _id
+      name
+      description
+      price
+      salePrice
+      images {
+        _key
+        asset {
+          url
+        }
+      }
+      sizes {
+        _id
+        name
+      }
+      colors {
+        _id
+        name
+      }
+      tags {
+        _id
+        name
+      }
+    `;
+    fetch(config.sanityURL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        query: `
+          query {
+            allCategory(sort: { name: ASC }) {
+              _id
+              name
+              image {
+                asset {
+                  url
+                }
+              }
+              products {
+                ${productFields}
+              }
+            }
+            allProduct {
+              ${productFields}
+            }
+            allTag {
+              _id
+              name
+            }
+          }
+        `,
+      }),
+    })
+      .then((res) => res.json())
+      .then(({ data }) => {
+        setCategories(data.allCategory);
+        setProducts(data.allProduct);
+        setTags(data.allTag);
+        setLoading(false);
+      });
     updateCart();
   }, []);
 
-  return (
+  return loading ? <LoadingSpinner /> : (
     <>
       <NavBar categories={categories} cart={cart} />
       {/* <Banner /> */}
       <div>
-        <Routes categories={categories} updateCart={updateCart} />
+        <Routes categories={categories} products={products} tags={tags} updateCart={updateCart} />
       </div>
       <Footer />
     </>

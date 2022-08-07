@@ -1,68 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import config from '../config';
 import { constructEmailHtml } from '../util';
-import LoadingSpinner from './LoadingSpinner';
 
-export default function Cart({ updateCart }) {
-  const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Cart({ categories, products, updateCart }) {
+  const cartString = localStorage.getItem('cart');
+  const initialItems = [];
+  if (cartString) {
+    const cart = JSON.parse(cartString);
+    if (cart.length > 0) {
+      cart.forEach((item, index) => {
+        const product = products.find(({ _id }) => _id === item.itemId);
+        const size = product.sizes.find(({ _id }) => _id === item.sizeId);
+        const color = product.colors.find(({ _id }) => _id === item.colorId);
+        if (!product || !size || !color) {
+          // One or more IDs are invalid; clear cart
+          localStorage.setItem('cart', '[]');
+        } else {
+          initialItems[index] = {
+            ...item,
+            itemName: product.name,
+            sizeName: size.name,
+            colorName: color.name,
+            photoURL: product.images[0].asset.url,
+            price: product.salePrice || product.fullPrice,
+          };
+        }
+      });
+    }
+  }
+
+  const [items, setItems] = useState(initialItems);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [buttonText, setButtonText] = useState('Submit Request');
-
-  useEffect(() => {
-    let cart = localStorage.getItem('cart');
-    if (cart) {
-      cart = JSON.parse(cart);
-      if (cart.length > 0) {
-        const promises = [
-          fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/publishedItems/${config.userID}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/itemsToPhotos/${config.userID}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/sizes/${config.userID}`).then((res) => res.json()),
-          fetch(`${config.apiURL}/colors/${config.userID}`).then((res) => res.json()),
-        ];
-        Promise.all(promises).then((results) => {
-          const [allCategories, allProducts, itemsToPhotos, photos, sizes, colors] = results;
-          setCategories(allCategories);
-          setProducts(allProducts);
-          cart.forEach((item, index) => {
-            const {
-              itemName, itemPrice, itemOnSale, itemSalePrice,
-            } = allProducts.find((product) => product.itemId === item.itemId);
-            const price = itemOnSale ? itemSalePrice : itemPrice;
-            const { sizeName } = sizes.find((size) => size.sizeId === item.sizeId);
-            const { colorName } = colors.find((color) => color.colorId === item.colorId);
-            const { photoId } = itemsToPhotos.find(
-              (itemToPhoto) => itemToPhoto.itemId === item.itemId,
-            );
-            const { photoName } = photos.find((photo) => photo.photoId === photoId);
-            cart[index] = {
-              ...item,
-              itemName,
-              sizeName,
-              colorName,
-              photoName,
-              price,
-            };
-          });
-          setItems([...cart]);
-          setLoading(false);
-        });
-      } else {
-        setLoading(false);
-      }
-    } else {
-      setLoading(false);
-    }
-  }, []);
 
   function updateQuantity(newQuantity, index) {
     if ((/^(\s*|\d+)$/).test(newQuantity)) {
@@ -154,13 +128,17 @@ export default function Cart({ updateCart }) {
   }
 
   function getProductURL(itemId) {
-    const product = products.find(
-      (productInList) => productInList.itemId === itemId,
-    );
-    const category = categories.find(
-      (categoryInList) => categoryInList.categoryId === product.categoryId,
-    );
-    return escape(`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`);
+    let categoryName;
+    let productName;
+    categories.forEach((category) => {
+      category.products.forEach((product) => {
+        if (product._id === itemId) {
+          categoryName = category.name;
+          productName = product.name;
+        }
+      });
+    });
+    return escape(`/items/${categoryName.toLowerCase().replace(/ /g, '_')}/${productName.toLowerCase().replace(/ /g, '_')}`);
   }
 
   function renderCart() {
@@ -173,7 +151,7 @@ export default function Cart({ updateCart }) {
               <div><p><i className="fas fa-times" onClick={() => removeItem(index)} /></p></div>
               <div>
                 <a href={productURL}>
-                  <img src={`${config.cloudfrontURL}/${item.photoName}`} alt={item.itemName} />
+                  <img src={item.photoURL} alt={item.itemName} />
                 </a>
               </div>
               <div className="product-details">
@@ -265,7 +243,7 @@ export default function Cart({ updateCart }) {
     );
   }
 
-  return loading ? <LoadingSpinner /> : (
+  return (
     <div className="page-content cart-page">
       {items.length > 0 && renderCart()}
       {renderForm()}

@@ -10,15 +10,15 @@ export default function Filter({ tags, selectedIds, toggleTag }) {
       <span className="filter-label"><p>{tags.length > 0 ? 'Filter:' : ''}</p></span>
       <span className="tags">
         {tags.map((tag) => {
-          const selected = selectedTagIds.includes(tag.tagId);
+          const selected = selectedTagIds.includes(tag._id);
           const className = `tag${selected ? ' selected' : ''}`;
           return (
             <span
-              key={tag.tagId}
+              key={tag._id}
               className={className}
-              onClick={() => toggleTag(tag.tagId)}
+              onClick={() => toggleTag(tag._id)}
             >
-              <p>{tag.tagName}</p>
+              <p>{tag.name}</p>
             </span>
           );
         })}

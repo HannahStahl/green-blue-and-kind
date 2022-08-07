@@ -1,90 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup';
 import FormControl from 'react-bootstrap/FormControl';
-import config from '../config';
-import LoadingSpinner from './LoadingSpinner';
 
 export default function Product(props) {
-  const { match } = props;
-
-  const [product, setProduct] = useState({});
   const [size, setSize] = useState(null);
   const [color, setColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(true);
   const [buttonText, setButtonText] = useState('Add to Cart');
   const [photoIndex, setPhotoIndex] = useState(0);
 
-  useEffect(() => {
-    fetch(`${config.apiURL}/publishedCategories/${config.userID}`).then((res) => res.json()).then((categories) => {
-      const categoryName = unescape(match.params.category).replace(/_/g, ' ');
-      const { categoryId } = categories.find((category) => (
-        category.categoryName.toLowerCase() === categoryName.toLowerCase()
-      ));
-      fetch(`${config.apiURL}/publishedItems/${config.userID}/${categoryId}`).then((res) => res.json()).then((products) => {
-        const productName = unescape(match.params.product).replace(/_/g, ' ');
-        const thisProduct = products.find((productInList) => (
-          productInList.itemName.toLowerCase() === productName.toLowerCase()
-        ));
-        if (!thisProduct) window.location.pathname = '/page-not-found';
-        else {
-          const { itemId } = thisProduct;
-          const promises = [
-            fetch(`${config.apiURL}/item/${config.userID}/${itemId}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/itemsToPhotos/${config.userID}/${itemId}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/photos/${config.userID}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/itemsToTags/${config.userID}/${itemId}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/tags/${config.userID}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/itemsToSizes/${config.userID}/${itemId}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/sizes/${config.userID}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/itemsToColors/${config.userID}/${itemId}`).then((res) => res.json()),
-            fetch(`${config.apiURL}/colors/${config.userID}`).then((res) => res.json()),
-          ];
-          Promise.all(promises).then((results) => {
-            const [
-              productDetails, productsToPhotos, photos, productsToTags, tags,
-              productsToSizes, sizes, productsToColors, colors,
-            ] = results;
-            const productPhotoIds = productsToPhotos
-              .filter((productToPhoto) => productToPhoto.itemId === itemId)
-              .map((productToPhoto) => productToPhoto.photoId);
-            const productPhotos = [];
-            productPhotoIds.forEach((photoId) => {
-              productPhotos.push(photos.find((photo) => photo.photoId === photoId));
-            });
-            productDetails.itemPhotos = productPhotos;
-            const productTagIds = productsToTags
-              .filter((productToTag) => productToTag.itemId === itemId)
-              .map((productToTag) => productToTag.tagId);
-            const productTags = [];
-            productTagIds.forEach((tagId) => {
-              productTags.push(tags.find((tag) => tag.tagId === tagId));
-            });
-            productDetails.itemTags = productTags.map((tag) => tag.tagName);
-            const productSizeIds = productsToSizes
-              .filter((productToSize) => productToSize.itemId === itemId)
-              .map((productToSize) => productToSize.sizeId);
-            const productSizes = [];
-            productSizeIds.forEach((sizeId) => {
-              productSizes.push(sizes.find((sizeInList) => sizeInList.sizeId === sizeId));
-            });
-            productDetails.itemSizes = productSizes;
-            const productColorIds = productsToColors
-              .filter((productToColor) => productToColor.itemId === itemId)
-              .map((productToColor) => productToColor.colorId);
-            const productColors = [];
-            productColorIds.forEach((colorId) => {
-              productColors.push(colors.find((colorInList) => colorInList.colorId === colorId));
-            });
-            productDetails.itemColors = productColors;
-            setProduct(productDetails);
-            setLoading(false);
-          });
-        }
-      });
-    });
-  }, [match.params.category, match.params.product]);
+  const { match, categories } = props;
+  const categoryName = unescape(match.params.category).replace(/_/g, ' ');
+  const category = categories.find((categoryInList) => (
+    categoryInList.name.toLowerCase() === categoryName.toLowerCase()
+  ));
+  if (!category) window.location.pathname = '/page-not-found';
+  const productName = unescape(match.params.product).replace(/_/g, ' ');
+  const product = category.products.find((productInList) => (
+    productInList.name.toLowerCase() === productName.toLowerCase()
+  ));
+  if (!product) window.location.pathname = '/page-not-found';
 
   function validateForm() {
     return size && color && quantity > 0;
@@ -94,7 +30,7 @@ export default function Product(props) {
     event.preventDefault();
     let cart = JSON.parse(localStorage.getItem('cart'));
     const newCartItem = {
-      itemId: product.itemId,
+      itemId: product._id,
       sizeId: size,
       colorId: color,
       quantity: parseInt(quantity),
@@ -152,40 +88,40 @@ export default function Product(props) {
     setButtonText('Add to Cart');
   }
 
-  return loading ? <LoadingSpinner /> : (
+  return (
     <div className="page-content product-page">
       <div className="product-info">
         <div className="product-photos">
           <img
-            key={product.itemPhotos[photoIndex].photoId}
-            src={`${config.cloudfrontURL}/${product.itemPhotos[photoIndex].photoName}`}
-            alt={product.itemName}
+            key={product.images[photoIndex]._key}
+            src={product.images[photoIndex].asset.url}
+            alt={product.name}
             className="product-photo"
           />
-          {product.itemPhotos.map((photo, index) => (
+          {product.images.map((photo, index) => (
             <img
-              key={photo.photoId}
-              src={`${config.cloudfrontURL}/${photo.photoName}`}
-              alt={`${product.itemName} ${index}`}
+              key={photo._key}
+              src={photo.asset.url}
+              alt={`${product.name} ${index}`}
               className="product-thumbnail"
               onClick={() => setPhotoIndex(index)}
             />
           ))}
         </div>
         <div className="product-details">
-          <h1>{product.itemName}</h1>
+          <h1>{product.name}</h1>
           <div className="product-price">
-            {product.itemOnSale ? (
+            {product.salePrice ? (
               <p>
-                <strike>{`$${product.itemPrice}`}</strike>
-                <span className="sale-price">{` $${product.itemSalePrice}`}</span>
+                <strike>{`$${product.price}`}</strike>
+                <span className="sale-price">{` $${product.salePrice}`}</span>
               </p>
-            ) : <p>{`$${product.itemPrice}`}</p>}
+            ) : <p>{`$${product.price}`}</p>}
           </div>
-          <p className="product-description">{product.itemDescription}</p>
-          {product.itemTags.length > 0 && (
+          <p className="product-description">{product.description}</p>
+          {product.tags && product.tags.length > 0 && (
             <div className="product-tags">
-              {product.itemTags.map((tag) => <div key={tag} className="product-tag">{tag}</div>)}
+              {product.tags.map((tag) => <div key={tag._id} className="product-tag">{tag.name}</div>)}
             </div>
           )}
           <form onSubmit={handleSubmit} className="product-form">
@@ -197,9 +133,9 @@ export default function Product(props) {
                 className={size ? '' : 'gray'}
               >
                 <option key="" value="" disabled>Size</option>
-                {product.itemSizes.map((productSize) => (
-                  <option key={productSize.sizeId} value={productSize.sizeId}>
-                    {productSize.sizeName}
+                {product.sizes.map((productSize) => (
+                  <option key={productSize._id} value={productSize._id}>
+                    {productSize.name}
                   </option>
                 ))}
               </FormControl>
@@ -212,9 +148,9 @@ export default function Product(props) {
                 className={color ? '' : 'gray'}
               >
                 <option key="" value="" disabled>Color</option>
-                {product.itemColors.map((productColor) => (
-                  <option key={productColor.colorId} value={productColor.colorId}>
-                    {productColor.colorName}
+                {product.colors.map((productColor) => (
+                  <option key={productColor._id} value={productColor._id}>
+                    {productColor.name}
                   </option>
                 ))}
               </FormControl>

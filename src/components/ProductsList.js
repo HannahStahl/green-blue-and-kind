@@ -1,7 +1,6 @@
 import React from 'react';
 import { LinkContainer } from 'react-router-bootstrap';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import config from '../config';
 
 export default function ProductsList({ category, products }) {
   return (
@@ -9,22 +8,20 @@ export default function ProductsList({ category, products }) {
       <ListGroup>
         {products.map((product) => (
           <LinkContainer
-            key={product.itemId}
-            to={escape(`/items/${category.categoryName.toLowerCase().replace(/ /g, '_')}/${product.itemName.toLowerCase().replace(/ /g, '_')}`)}
+            key={product._id}
+            to={escape(`/items/${category.name.toLowerCase().replace(/ /g, '_')}/${product.name.toLowerCase().replace(/ /g, '_')}`)}
           >
             <ListGroupItem>
-              {product.itemPhotos[0].photoName && (
-                <img src={`${config.cloudfrontURL}/${product.itemPhotos[0].photoName}`} alt={product.itemName} />
-              )}
+              <img src={product.images[0].asset.url} alt={product.name} />
               <div className="item-name">
-                <h4>{product.itemName.trim().split('\n')[0]}</h4>
+                <h4>{product.name.trim().split('\n')[0]}</h4>
                 {
-                  product.itemOnSale ? (
+                  product.salePrice ? (
                     <p>
-                      <strike>{`$${product.itemPrice}`}</strike>
-                      <span className="sale-price">{` $${product.itemSalePrice}`}</span>
+                      <strike>{`$${product.price}`}</strike>
+                      <span className="sale-price">{` $${product.salePrice}`}</span>
                     </p>
-                  ) : <p>{`$${product.itemPrice}`}</p>
+                  ) : <p>{`$${product.price}`}</p>
                 }
               </div>
             </ListGroupItem>
