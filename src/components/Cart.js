@@ -18,6 +18,7 @@ export default function Cart({ categories, products, updateCart }) {
         if (!product || !size || !color) {
           // One or more IDs are invalid; clear cart
           localStorage.setItem('cart', '[]');
+          updateCart();
         } else {
           initialItems[index] = {
             ...item,
