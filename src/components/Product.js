@@ -113,10 +113,10 @@ export default function Product(props) {
           <div className="product-price">
             {product.salePrice ? (
               <p>
-                <strike>{`$${product.price}`}</strike>
-                <span className="sale-price">{` $${product.salePrice}`}</span>
+                <strike>{`$${product.price.toFixed(2)}`}</strike>
+                <span className="sale-price">{` $${product.salePrice.toFixed(2)}`}</span>
               </p>
-            ) : <p>{`$${product.price}`}</p>}
+            ) : <p>{`$${product.price.toFixed(2)}`}</p>}
           </div>
           <p className="product-description">{product.description}</p>
           {product.tags && product.tags.length > 0 && (

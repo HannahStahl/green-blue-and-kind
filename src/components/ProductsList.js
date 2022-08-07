@@ -18,10 +18,10 @@ export default function ProductsList({ category, products }) {
                 {
                   product.salePrice ? (
                     <p>
-                      <strike>{`$${product.price}`}</strike>
-                      <span className="sale-price">{` $${product.salePrice}`}</span>
+                      <strike>{`$${product.price.toFixed(2)}`}</strike>
+                      <span className="sale-price">{` $${product.salePrice.toFixed(2)}`}</span>
                     </p>
-                  ) : <p>{`$${product.price}`}</p>
+                  ) : <p>{`$${product.price.toFixed(2)}`}</p>
                 }
               </div>
             </ListGroupItem>

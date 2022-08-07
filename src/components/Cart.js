@@ -26,7 +26,7 @@ export default function Cart({ categories, products, updateCart }) {
             sizeName: size.name,
             colorName: color.name,
             photoURL: product.images[0].asset.url,
-            price: product.salePrice || product.fullPrice,
+            price: (product.salePrice || product.price).toFixed(2),
           };
         }
       });
@@ -97,7 +97,7 @@ export default function Cart({ categories, products, updateCart }) {
         size: item.sizeName,
         color: item.colorName,
         quantity: item.quantity,
-        price: item.quantity * item.price,
+        price: (item.quantity * item.price).toFixed(2),
       })),
       total: getTotal(),
     };
