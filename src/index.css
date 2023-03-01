@@ -260,6 +260,11 @@ button {
   height: 20px;
 }
 
+.shop-products {
+  display: flex;
+  flex-direction: column;
+}
+
 .shop-products p {
   font-size: 24px;
   margin-bottom: 5px;
